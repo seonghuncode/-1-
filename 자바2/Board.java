@@ -31,13 +31,16 @@ public class Board {
 				print_add();
 			}
 			else if(cmd.equals("list")) {
-				list();
+				list(collects);
 			}
 			else if(cmd.equals("update")) {
 				print_update();
 				}
 			else if(cmd.equals("delete")) {
 				print_delete();
+			}
+			else if(cmd.equals("search")) {
+				print_search();
 			}
 				
 						
@@ -52,10 +55,53 @@ public class Board {
 
 	} //---------------------------------------------------------------------------->public class
 	
+	private void print_search() {
+		
+		//방법1. 스스로 풀었던 방법
+//		while(true) {
+//			System.out.print("검색 키워드를 입력해 주세요 :");
+//			String search = sc.nextLine();
+//			
+//			for(int i = 0; i < collects.size(); i++) {
+//				
+//				if(collects.get(i).title.contains(search)) {
+//					System.out.println(collects.get(i).id);
+//					System.out.println(collects.get(i).title);
+//					System.out.println("=====================");
+//					break;
+//				}
+//				else {
+//					System.out.println("존재 하지 않는 키워드 입니다. 다시 입력해 주세요.");
+//				}
+//				break;
+//			}	
+//			
+//		}
+		
+	//방법2. 강사님 방법
+		
+		System.out.print("검색어 : ");
+		String keyword = sc.nextLine();
+		
+		ArrayList<Collect> search_collects = new ArrayList<>();
+		
+		for(int i = 0; i < collects.size(); i++) {
+			if(collects.get(i).title.contains(keyword)) {
+				search_collects.add(collects.get(i));
+			}
+		}
+		list(search_collects);
+		
+	}
+		
+			
+		
+	
+
 	private void print_delete() {
 		while(true) {
 			
-			list();
+			list(collects);
 			System.out.print("삭제할 게시물 번호 : ");
 			int target = Integer.parseInt(sc.nextLine());
 			
@@ -78,7 +124,7 @@ public class Board {
 				collects.remove(target_real_num);
 				
 				System.out.println("게시물이 삭제 되었습니다.");
-				list();
+				list(collects);
 				break;
 			}
 		}
@@ -88,7 +134,7 @@ public class Board {
 		
 		while(true) {
 			
-			list();
+			list(collects);
 			
 			System.out.print("수정할 게시물 번호 :");
 			int target = Integer.parseInt(sc.nextLine());
@@ -110,7 +156,7 @@ public class Board {
 				collects.set(target_real_num, collect);
 				
 				System.out.println("수정이 완료 되었습니다.");
-				list();
+				list(collects);
 				break;
 			}
 		 }
@@ -152,14 +198,13 @@ public class Board {
 		
 		
 	
-	public void list() {
-		for(int i = 0; i < collects.size(); i++) {
+	public void list(ArrayList<Collect> list) {
+		for(int i = 0; i < list.size(); i++) {
 			
-			Collect collect = collects.get(i);
+			Collect collect = list.get(i);
 			
 			System.out.println("번호 :" + collect.id);
 			System.out.println("제목 :" + collect.title);
-			System.out.println("내용 :" + collect.body); 
 			System.out.println("===================");
 		}
 	}
