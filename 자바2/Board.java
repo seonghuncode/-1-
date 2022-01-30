@@ -3,6 +3,8 @@ package 자바2;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import 자바2.util.My_util;
+
 public class Board {
 	
 	Scanner sc = new Scanner(System.in);
@@ -10,6 +12,7 @@ public class Board {
 	
 	
 	int count_numbers = 4;
+	int hit = 0;
 	
 	public Board() {
 		test_data();
@@ -60,10 +63,16 @@ public class Board {
 	} //---------------------------------------------------------------------------->public class
 	
 	
-	private void test_data() {  //우선 collects에 저장을 해놀고 lisk를 하면 저장된 값이 잘 보여진다.
-		collects.add(new Collect(1, "제목1", "입니다"));
-		collects.add(new Collect(2, "제목2", "입니다"));
-		collects.add(new Collect(3, "제목3", "입니다"));
+	private void test_data() {  //우선 collects에 저장을 해놀고 list를 하면 저장된 값이 잘 보여진다.
+//		String currentDate = My_util.getCurrentDate("yyyy-mm-dd");
+//		
+//		collects.add(new Collect(1, "제목1", "입니다", "익명", currentDate, 0));
+//		collects.add(new Collect(2, "제목2", "입니다", "익명", currentDate, 0));
+//		collects.add(new Collect(3, "제목3", "입니다", "익명", currentDate, 0));
+		
+		collects.add(new Collect(1, "제목1", "입니다", "익명", My_util.getCurrentDate("yyyy-MM-dd"), 0));
+		collects.add(new Collect(2, "제목2", "입니다", "익명", My_util.getCurrentDate("yyyy-MM-dd"), 0));
+		collects.add(new Collect(3, "제목3", "입니다", "익명", My_util.getCurrentDate("yyyy-MM-dd"), 0));
 	}
 	
 	private void print_search() {
@@ -163,7 +172,9 @@ public class Board {
 				System.out.print("새내용 :"); 
 				String new_body = sc.nextLine();
 			
-				Collect collect = new Collect(target, new_title, new_body);
+				//업데이트시 등록날짜가 변하면 안되므로 등록날짜에 대한 부분 수정 필요=================================================
+				String currnetDate = My_util.getCurrentDate("yyyy-MM-dd");//---------->업데이트시 시간과 조회수 처리 방법??
+				Collect collect = new Collect(target, new_title, new_body, "익명", currnetDate, hit);//--------------????
 				collects.set(target_real_num, collect);
 				
 				System.out.println("수정이 완료 되었습니다.");
@@ -180,7 +191,8 @@ public class Board {
 		System.out.print("내용을 입력해 주세요 :");
 		String body = sc.nextLine();
 		
-		Collect collect = new Collect(count_numbers, title, body);// --> class의 인스턴스를 만들어 사용한다.
+		String CurrentDate = My_util.getCurrentDate("yyyy-MM-dd");
+		Collect collect = new Collect(count_numbers, title, body, "익명", CurrentDate, 0);// --> class의 인스턴스를 만들어 사용한다.
 		collects.add(collect); // --> collects의 배열에 collect를 저장해 준다.
 		
 		System.out.println("게시물 저장 되었습니다.");
@@ -207,18 +219,27 @@ public class Board {
 		return -1;
 	}
 		
-		
+	
 	
 	public void list(ArrayList<Collect> list) {
 		for(int i = 0; i < list.size(); i++) {
 			
 			Collect collect = list.get(i);
+		
 			
 			System.out.println("번호 :" + collect.id);
 			System.out.println("제목 :" + collect.title);
+			System.out.println("작성자 :" + collect.writer);
+			System.out.println("등록날짜 :" + collect.regDate );
+			System.out.println("조회수 :" + collect.hit);
 			System.out.println("===================");
 		}
 	}
+	
+	
+
+
+	
 	
 
 }// -----------------------------------------------------> main 메서드
