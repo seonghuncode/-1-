@@ -9,8 +9,11 @@ public class Board {
 	ArrayList<Collect> collects = new ArrayList<>();
 	
 	
-	int count_numbers = 1;
+	int count_numbers = 4;
 	
+	public Board() {
+		test_data();
+	}
 	
 
 	public void runboard(){
@@ -42,6 +45,7 @@ public class Board {
 			else if(cmd.equals("search")) {
 				print_search();
 			}
+			
 				
 						
 				
@@ -54,6 +58,13 @@ public class Board {
 		
 
 	} //---------------------------------------------------------------------------->public class
+	
+	
+	private void test_data() {  //우선 collects에 저장을 해놀고 lisk를 하면 저장된 값이 잘 보여진다.
+		collects.add(new Collect(1, "제목1", "입니다"));
+		collects.add(new Collect(2, "제목2", "입니다"));
+		collects.add(new Collect(3, "제목3", "입니다"));
+	}
 	
 	private void print_search() {
 		
