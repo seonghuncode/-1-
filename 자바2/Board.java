@@ -9,7 +9,7 @@ public class Board {
 	
 	Scanner sc = new Scanner(System.in);
 	ArrayList<Collect> collects = new ArrayList<>();
-	
+	ArrayList<Member> members = new ArrayList<>();
 	
 	int count_numbers = 4;
 
@@ -51,6 +51,9 @@ public class Board {
 			else if(cmd.equals("read")) {
 				print_read();
 			}
+			else if(cmd.equals("signup")) {
+				print_sign_up();
+			}
 			
 				
 						
@@ -66,6 +69,26 @@ public class Board {
 	} //---------------------------------------------------------------------------->public class
 	
 	
+	private void print_sign_up() {
+
+		System.out.println("=== 회원가입을 진행 합니다 ===");
+		
+		System.out.print("아이디를 입력해 주세요 :");
+		String my_id = sc.nextLine();
+	
+		System.out.print("비밀번호를 입력해 주세요 :");
+		String my_pw = sc.nextLine();
+		
+		System.out.print("닉네임을 입력해 주세요 :");
+		String nickname = sc.nextLine();
+		
+		Member member = new Member(my_id, my_pw, nickname);//Member의 member라는 인스턴스를 만들어 그에 맞게 저장을 해준다?
+		members.add(member);  //그 후 members에 member를 통으로 저장한다.
+		
+		System.out.println("=== 회원가입이 완료 되었습니다 ===");
+	}
+
+
 	private void print_read() {
 		  /*
 		  명령어를 입력해주세요 : read
