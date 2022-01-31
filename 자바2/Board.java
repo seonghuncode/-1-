@@ -12,6 +12,7 @@ public class Board {
 	ArrayList<Member> members = new ArrayList<>();
 	
 	int count_numbers = 4;
+	Member logined_id = null;
 
 	
 	public Board() {
@@ -27,7 +28,12 @@ public class Board {
 		
 		while(true) {
 			
-			System.out.print("명령어를 입력해 주새요 : ");
+			if(logined_id == null) {
+				System.out.print("명령어를 입력해 주새요 : ");
+			}
+			else {
+				System.out.print("명령어를 입력해 주새요 : " + "[" + logined_id.member_id + "(" + logined_id.member_nickname + ")]");
+			}
 			String cmd = sc.nextLine();
 			
 			if(cmd.equals("help")) {
@@ -54,6 +60,9 @@ public class Board {
 			else if(cmd.equals("signup")) {
 				print_sign_up();
 			}
+			else if(cmd.equals("signin")) {
+				print_sign_in();
+			}
 			
 				
 						
@@ -69,6 +78,35 @@ public class Board {
 	} //---------------------------------------------------------------------------->public class
 	
 	
+	private void print_sign_in() {
+
+
+		System.out.print("아이디 :");
+		String id = sc.nextLine();
+		
+		System.out.print("비밀번호 :");
+		String pw = sc.nextLine();
+		
+		boolean is_exist_id = false;
+		
+		for(int i = 0; i < members.size(); i++) {
+			Member result = members.get(i);
+			if(result.member_id.equals(id) && result.member_pw.equals(pw)) {  //문자를 비교할때는 .equals() 시용.
+				System.out.println(result.member_nickname + "님 환영 합니다!!");
+				is_exist_id = true;
+				logined_id = result;
+				break;
+			}
+			else if(is_exist_id == false) {
+				System.out.println("비밀번호를 틀렸거나 잘못된 회원정보입니다.");
+			}
+		} // -> for문
+	
+		
+		
+	}
+
+
 	private void print_sign_up() {
 
 		System.out.println("=== 회원가입을 진행 합니다 ===");
