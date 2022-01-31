@@ -12,7 +12,7 @@ public class Board {
 	
 	
 	int count_numbers = 4;
-	int hit = 0;
+
 	
 	public Board() {
 		test_data();
@@ -48,6 +48,9 @@ public class Board {
 			else if(cmd.equals("search")) {
 				print_search();
 			}
+			else if(cmd.equals("read")) {
+				print_read();
+			}
 			
 				
 						
@@ -63,6 +66,67 @@ public class Board {
 	} //---------------------------------------------------------------------------->public class
 	
 	
+	private void print_read() {
+		  /*
+		  명령어를 입력해주세요 : read
+		  상세보기할 게시물 번호를 입력해주세요 : 1
+		  ==== 1번 게시물 ====
+		  번호 : 1
+		  제목 : 제목1
+		  -------------------
+		  내용 : 안녕하세요 ~
+		  -------------------
+		  ===================
+		  명령어를 입력해주세요 : read
+		  상세보기할 게시물 번호를 입력해주세요 : 5
+		  없는 게시물입니다.
+		*/
+		
+		list(collects);  // -> 왜 debug경고문이 뜨는지???????
+		
+		while(true) {
+			
+			System.out.print("상세보기할 게시물 번호를 입력 주세요 :");
+			int read = Integer.parseInt(sc.nextLine());
+			
+			int target_real_num = check_exist(read);
+			if(target_real_num == -1) {
+				System.out.println("없는 게시물 입니다.");
+			}
+			else {
+//				방법1				
+//				System.out.println("===" + collects.get(read - 1).id + "게시물 ===");
+//				System.out.println("번호 :" + collects.get(read-1).id);
+//				System.out.println("제목 :" + collects.get(read-1).title);
+//				System.out.println("----------------");
+//				System.out.println(collects.get(read-1).body);
+//				System.out.println("----------------");
+//				System.out.println("================");
+				
+				//방법2
+				Collect collect = collects.get(read - 1);
+				
+				collect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
+				
+				System.out.println("===" + collect.id + "게시물 ===");
+				System.out.println("번호 :" + collect.id);
+				System.out.println("제목 :" + collect.title);
+				System.out.println("----------------");
+				System.out.println("내용 :" + collect.body);
+				System.out.println("작성자 :" + collect.writer);
+				System.out.println("작성일" + collect.regDate);
+				System.out.println("조회수" + collect.hit);
+				System.out.println("----------------");
+				System.out.println("================");
+				
+				break;
+			}
+			
+		}// -> while문
+		
+	}
+
+
 	private void test_data() {  //우선 collects에 저장을 해놀고 list를 하면 저장된 값이 잘 보여진다.
 //		String currentDate = My_util.getCurrentDate("yyyy-mm-dd");
 //		
@@ -174,7 +238,7 @@ public class Board {
 			
 				//업데이트시 등록날짜가 변하면 안되므로 등록날짜에 대한 부분 수정 필요=================================================
 				String currnetDate = My_util.getCurrentDate("yyyy-MM-dd");//---------->업데이트시 시간과 조회수 처리 방법??
-				Collect collect = new Collect(target, new_title, new_body, "익명", currnetDate, hit);//--------------????
+				Collect collect = new Collect(target, new_title, new_body, "익명", currnetDate, 0);//--------------????
 				collects.set(target_real_num, collect);
 				
 				System.out.println("수정이 완료 되었습니다.");
@@ -211,7 +275,7 @@ public class Board {
 		
 		for(int i = 0; i < collects.size(); i++) {
 			//int current_num = collects.get(i).id;
-			Collect current_num = collects.get(i);
+			Collect current_num = collects.get(i);  //배열의 순서를 넘겨준것이 아니라 ~번째 배열의 값을 보여준다.(ex.0번째 -> 1저장)
 			if(target == current_num.id) {
 				return i;
 			}
