@@ -13,13 +13,12 @@ public class Board {
 	
 	int count_numbers = 4;
 	Member logined_id = null;
-
 	
 	public Board() {
 		test_data();
 	}
 	
-
+	
 	public void runboard(){
 		
 		//자바2 연습하기----------------------------------------------------------------------------------------------------
@@ -77,6 +76,7 @@ public class Board {
 
 	} //---------------------------------------------------------------------------->public class
 	
+
 	
 	private void print_sign_in() {
 
@@ -195,9 +195,18 @@ public class Board {
 //		collects.add(new Collect(2, "제목2", "입니다", "익명", currentDate, 0));
 //		collects.add(new Collect(3, "제목3", "입니다", "익명", currentDate, 0));
 		
-		collects.add(new Collect(1, "제목1", "입니다", "익명", My_util.getCurrentDate("yyyy-MM-dd"), 0));
-		collects.add(new Collect(2, "제목2", "입니다", "익명", My_util.getCurrentDate("yyyy-MM-dd"), 0));
-		collects.add(new Collect(3, "제목3", "입니다", "익명", My_util.getCurrentDate("yyyy-MM-dd"), 0));
+		String date = My_util.getCurrentDate("yyyy-MM-dd");
+		
+		collects.add(new Collect(1, "제목1", "입니다", "닉네임1", date, 0));
+		collects.add(new Collect(2, "제목2", "입니다", "닉네임2", date, 0));
+		collects.add(new Collect(3, "제목3", "입니다", "닉네임3", date, 0));
+		members.add(new Member("아이디1", "비밀번호1", "닉네임1"));
+		members.add(new Member("아이디2", "비밀번호2", "닉네임2"));
+		members.add(new Member("아이디3", "비밀번호3", "닉네임3"));
+		
+		//collects.add(new Collect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
+		
+		
 	}
 	
 	private void print_search() {
@@ -351,13 +360,17 @@ public class Board {
 			
 			Collect collect = list.get(i);
 		
-			
 			System.out.println("번호 :" + collect.id);
 			System.out.println("제목 :" + collect.title);
 			System.out.println("작성자 :" + collect.writer);
 			System.out.println("등록날짜 :" + collect.regDate );
 			System.out.println("조회수 :" + collect.hit);
 			System.out.println("===================");
+		}
+		for(int i = 0; i < members.size(); i++) {
+			Member member = members.get(i);
+			System.out.println(member.member_nickname + "님 횐영합니다!!");
+			logined_id = member;
 		}
 	}
 	
