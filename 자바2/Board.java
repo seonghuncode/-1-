@@ -62,6 +62,9 @@ public class Board {
 			else if(cmd.equals("signin")) {
 				print_sign_in();
 			}
+			else if(cmd.equals("logout")) {
+				print_logout();
+			}
 			
 				
 						
@@ -78,6 +81,19 @@ public class Board {
 	
 
 	
+	private void print_logout() {
+		
+		if(logined_id != null) {
+			logined_id = null;
+			System.out.println("로그아웃 되었습니다. 감사합니다.");
+		}
+		else{
+			System.out.println("로그인이 필요한 기능 입니다. 로그긴 후 사용해 주세요!");
+		}
+		
+	}
+
+
 	private void print_sign_in() {
 
 
