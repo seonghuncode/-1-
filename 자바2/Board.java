@@ -11,7 +11,8 @@ public class Board {
 	ArrayList<Collect> collects = new ArrayList<>();
 	ArrayList<Member> members = new ArrayList<>();
 	
-	int count_numbers = 4;
+	int collects_num= 4;//게시물 번호
+	int members_num = 3;//멤버 고유 번호(중복 방지)
 	Member logined_id = null;
 	
 	public Board() {
@@ -39,7 +40,9 @@ public class Board {
 				print_help();
 			}
 			else if(cmd.equals("add")) {
-				print_add();
+				if(check_login() == true) {
+					print_add();
+				}
 			}
 			else if(cmd.equals("list")) {
 				list(collects);
@@ -63,7 +66,12 @@ public class Board {
 				print_sign_in();
 			}
 			else if(cmd.equals("logout")) {
-				print_logout();
+				if(check_login() == true) {
+					print_logout();
+				}
+			}
+			else if(cmd.equals("testdata")) {
+				test_list(collects); // --> test_list()때문에 list()사용시 번호가 4번 부터 시작한다.
 			}
 			
 				
@@ -79,18 +87,19 @@ public class Board {
 
 	} //---------------------------------------------------------------------------->public class
 	
+	private boolean check_login() {
+		if(logined_id == null) {
+			System.out.println("로그인이 필요한 기능입니다. 로그인 후 사용해 주세요.");
+			return false;
+		}
+		return true;
+	} // --> 로그인이 되었는지 체크하는 기능.
 
 	
 	private void print_logout() {
 		
-		if(logined_id != null) {
 			logined_id = null;
 			System.out.println("로그아웃 되었습니다. 감사합니다.");
-		}
-		else{
-			System.out.println("로그인이 필요한 기능 입니다. 로그긴 후 사용해 주세요!");
-		}
-		
 	}
 
 
@@ -136,28 +145,15 @@ public class Board {
 		System.out.print("닉네임을 입력해 주세요 :");
 		String nickname = sc.nextLine();
 		
-		Member member = new Member(my_id, my_pw, nickname);//Member의 member라는 인스턴스를 만들어 그에 맞게 저장을 해준다?
+		Member member = new Member(members_num, my_id, my_pw, nickname);//Member의 member라는 인스턴스를 만들어 그에 맞게 저장을 해준다?
 		members.add(member);  //그 후 members에 member를 통으로 저장한다.
 		
 		System.out.println("=== 회원가입이 완료 되었습니다 ===");
+		members_num++;
 	}
 
 
 	private void print_read() {
-		  /*
-		  명령어를 입력해주세요 : read
-		  상세보기할 게시물 번호를 입력해주세요 : 1
-		  ==== 1번 게시물 ====
-		  번호 : 1
-		  제목 : 제목1
-		  -------------------
-		  내용 : 안녕하세요 ~
-		  -------------------
-		  ===================
-		  명령어를 입력해주세요 : read
-		  상세보기할 게시물 번호를 입력해주세요 : 5
-		  없는 게시물입니다.
-		*/
 		
 		list(collects);  // -> 왜 debug경고문이 뜨는지???????
 		
@@ -190,7 +186,7 @@ public class Board {
 				System.out.println("제목 :" + collect.title);
 				System.out.println("----------------");
 				System.out.println("내용 :" + collect.body);
-				System.out.println("작성자 :" + collect.writer);
+				System.out.println("작성자 :" + collect.members_id);  // 작성자가 숫자로 나온다????
 				System.out.println("작성일" + collect.regDate);
 				System.out.println("조회수" + collect.hit);
 				System.out.println("----------------");
@@ -213,16 +209,16 @@ public class Board {
 		
 		String date = My_util.getCurrentDate("yyyy-MM-dd");
 		
-		collects.add(new Collect(1, "제목1", "입니다", "닉네임1", date, 0));
-		collects.add(new Collect(2, "제목2", "입니다", "닉네임2", date, 0));
-		collects.add(new Collect(3, "제목3", "입니다", "닉네임3", date, 0));
-		members.add(new Member("아이디1", "비밀번호1", "닉네임1"));
-		members.add(new Member("아이디2", "비밀번호2", "닉네임2"));
-		members.add(new Member("아이디3", "비밀번호3", "닉네임3"));
+		collects.add(new Collect(1, "제목1", "입니다", 1, date, 0));
+		collects.add(new Collect(2, "제목2", "입니다", 2, date, 0));
+		collects.add(new Collect(3, "제목3", "입니다", 3, date, 0));
+		members.add(new Member(1, "아이디1", "비밀번호1", "닉네임1"));
+		members.add(new Member(2, "아이디2", "비밀번호2", "닉네임2"));
+		members.add(new Member(3, "아이디3", "비밀번호3", "닉네임3"));
 		
 		//collects.add(new Collect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
 		
-		
+		//loginedMember = members.get(0);
 	}
 	
 	private void print_search() {
@@ -324,8 +320,10 @@ public class Board {
 			
 				//업데이트시 등록날짜가 변하면 안되므로 등록날짜에 대한 부분 수정 필요=================================================
 				String currnetDate = My_util.getCurrentDate("yyyy-MM-dd");//---------->업데이트시 시간과 조회수 처리 방법??
-				Collect collect = new Collect(target, new_title, new_body, "익명", currnetDate, 0);//--------------????
-				collects.set(target_real_num, collect);
+				
+				//보류------------------------------------------------------------------
+				//Collect collect = new Collect(target, new_title, new_body, "익명", currnetDate, 0);//--------------????
+				//collects.set(target_real_num, collect);
 				
 				System.out.println("수정이 완료 되었습니다.");
 				list(collects);
@@ -335,18 +333,20 @@ public class Board {
 	}
 
 	private void print_add() {
-		System.out.print("제목을 입력해 주세요 :");
-		String title = sc.nextLine();
 		
-		System.out.print("내용을 입력해 주세요 :");
-		String body = sc.nextLine();
-		
-		String CurrentDate = My_util.getCurrentDate("yyyy-MM-dd");
-		Collect collect = new Collect(count_numbers, title, body, "익명", CurrentDate, 0);// --> class의 인스턴스를 만들어 사용한다.
-		collects.add(collect); // --> collects의 배열에 collect를 저장해 준다.
-		
-		System.out.println("게시물 저장 되었습니다.");
-		count_numbers++;
+			System.out.print("제목을 입력해 주세요 :");
+			String title = sc.nextLine();
+			
+			System.out.print("내용을 입력해 주세요 :");
+			String body = sc.nextLine();
+			
+			String CurrentDate = My_util.getCurrentDate("yyyy-MM-dd");
+			Collect collect = new Collect(collects_num, title, body, logined_id.id, CurrentDate, 0);// --> class의 인스턴스를 만들어 사용한다.
+			collects.add(collect); // --> collects의 배열에 collect를 저장해 준다.
+			
+			System.out.println("게시물 저장 되었습니다.");
+			collects_num++;			
+			// logined.member_nickname -> logined_id.id(이름이 중복되면 구분할 수 없기 때문에 id로 중복되지 않는 값으로 만들어 준다.)
 	}
 
 	private void print_help() {
@@ -372,13 +372,28 @@ public class Board {
 	
 	
 	public void list(ArrayList<Collect> list) {
+		for(int i = 3; i < list.size(); i++) {
+			
+			Collect collect = list.get(i);
+		
+			System.out.println("번호 :" + collect.id);
+			System.out.println("제목 :" + collect.title);
+			System.out.println("작성자 :" + collect.members_id);
+			System.out.println("등록날짜 :" + collect.regDate );
+			System.out.println("조회수 :" + collect.hit);
+			System.out.println("===================");
+		}
+	}
+	
+	
+	public void test_list(ArrayList<Collect> list) {
 		for(int i = 0; i < list.size(); i++) {
 			
 			Collect collect = list.get(i);
 		
 			System.out.println("번호 :" + collect.id);
 			System.out.println("제목 :" + collect.title);
-			System.out.println("작성자 :" + collect.writer);
+			System.out.println("작성자 :" + collect.members_id);
 			System.out.println("등록날짜 :" + collect.regDate );
 			System.out.println("조회수 :" + collect.hit);
 			System.out.println("===================");
