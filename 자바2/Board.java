@@ -162,8 +162,10 @@ public class Board {
 			System.out.print("상세보기할 게시물 번호를 입력 주세요 :");
 			int read = Integer.parseInt(sc.nextLine());
 			
-			int target_real_num = check_exist(read);
-			if(target_real_num == -1) {
+			
+			Collect collect = getCollectByNo(read);
+			
+			if(collect == null) {
 				System.out.println("없는 게시물 입니다.");
 			}
 			else {
@@ -177,7 +179,7 @@ public class Board {
 //				System.out.println("================");
 				
 				//방법2
-				Collect collect = collects.get(read - 1);
+			
 				
 				collect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
 				
@@ -186,7 +188,7 @@ public class Board {
 				System.out.println("제목 :" + collect.title);
 				System.out.println("----------------");
 				System.out.println("내용 :" + collect.body);
-				System.out.println("작성자 :" + collect.members_id);  // 작성자가 숫자로 나온다????
+				System.out.println("작성자 :" + collect.nickname);  // 작성자가 숫자로 나온다????
 				System.out.println("작성일" + collect.regDate);
 				System.out.println("조회수" + collect.hit);
 				System.out.println("----------------");
@@ -280,14 +282,14 @@ public class Board {
 //				}
 //			}
 			
-			int target_real_num = check_exist(target);
+			Collect collect = getCollectByNo(target);
 			
-			if(target_real_num == -1) {
+			if(collect == null) {
 				System.out.println("없는 게시물 번호 입니다. 다시 입력해 주세요.");
 			}
 			else {
 				
-				collects.remove(target_real_num);
+				collects.remove(collect);
 				
 				System.out.println("게시물이 삭제 되었습니다.");
 				list(collects);
@@ -305,9 +307,9 @@ public class Board {
 			System.out.print("수정할 게시물 번호 :");
 			int target = Integer.parseInt(sc.nextLine());
 			
-			int target_real_num = check_exist(target);
+			Collect collect = getCollectByNo(target);
 			
-			if(target_real_num == -1) {
+			if(collect == null) {
 				System.out.println("없는 게시물 입니다. 다시 입력해 주세요.");
 			}
 			else {
@@ -321,9 +323,8 @@ public class Board {
 				//업데이트시 등록날짜가 변하면 안되므로 등록날짜에 대한 부분 수정 필요=================================================
 				String currnetDate = My_util.getCurrentDate("yyyy-MM-dd");//---------->업데이트시 시간과 조회수 처리 방법??
 				
-				//보류------------------------------------------------------------------
-				//Collect collect = new Collect(target, new_title, new_body, "익명", currnetDate, 0);//--------------????
-				//collects.set(target_real_num, collect);
+				collect.title = new_title;
+				collect.body = new_body;
 				
 				System.out.println("수정이 완료 되었습니다.");
 				list(collects);
@@ -357,18 +358,53 @@ public class Board {
 		System.out.println("delete : 게시물 삭제");
 	}
 
-	public int check_exist(int target) {
+	// 게시물 데이터를 찾을 때 index가 아닌 게시물 데이터 그 자체를 찾는 것으로 변경
+	// 회원이름을 게시물에 적용시켜 조립된 상태로 얻기 위함.
+	public Collect getCollectByNo(int targetNo) {
 		
+		Collect targetCollect = null;
+		
+		//찾고자 하는 게시물 찾기
 		for(int i = 0; i < collects.size(); i++) {
 			//int current_num = collects.get(i).id;
 			Collect current_num = collects.get(i);  //배열의 순서를 넘겨준것이 아니라 ~번째 배열의 값을 보여준다.(ex.0번째 -> 1저장)
-			if(target == current_num.id) {
-				return i;
+			if(targetNo == current_num.id) {
+			
+				targetCollect = current_num;
+				break;
 			}
 		}
-		return -1;
+		//닉네임 세팅
+		targetCollect = setCollectNickname(targetCollect);
+		//반환
+		return targetCollect;
 	}
 		
+	
+	// 게시물을 받아 해당 게시물의 작성자 번호에 맞는 작성자 닉네임을 세팅해주는 메서드
+	private Collect setCollectNickname(Collect collect) {
+		// null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null 그대로 반환
+		if(collect != null) {
+			Member member = getMemberByMemberNo(collect.members_id);
+			collect.nickname = member.member_nickname;
+		}
+		return collect;
+	}
+	
+	// 게시물 찾기와 마찬가지로 역시 회원 정보 그 자체를 찾은 것으로 변경
+	private Member getMemberByMemberNo(int memberId) {
+		
+		Member targetMember = null;
+		
+		for(int i = 0; i < members.size(); i++) {
+			Member currentMember = members.get(i);
+			if(memberId == currentMember.id) {
+				targetMember = currentMember;
+				break;
+			}
+		}
+		return targetMember;
+	}
 	
 	
 	public void list(ArrayList<Collect> list) {
@@ -378,7 +414,7 @@ public class Board {
 		
 			System.out.println("번호 :" + collect.id);
 			System.out.println("제목 :" + collect.title);
-			System.out.println("작성자 :" + collect.members_id);
+			System.out.println("작성자 :" + collect.nickname);
 			System.out.println("등록날짜 :" + collect.regDate );
 			System.out.println("조회수 :" + collect.hit);
 			System.out.println("===================");
