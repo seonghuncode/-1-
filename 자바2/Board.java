@@ -155,17 +155,21 @@ public class Board {
 
 	private void print_read() {
 		
-		list(collects);  // -> 왜 debug경고문이 뜨는지???????
 		
 		while(true) {
+			list(collects);  
 			
-			System.out.print("상세보기할 게시물 번호를 입력 주세요 :");
+			
+			System.out.print("상세보기할 게시물 번호를 입력 주세요(취소 : 0) :");
 			int read = Integer.parseInt(sc.nextLine());
 			
 			
 			Collect collect = getCollectByNo(read);
 			
-			if(collect == null) {
+			if(read == 0) {
+				break;
+			}
+			else if(collect == null) {
 				System.out.println("없는 게시물 입니다.");
 			}
 			else {
@@ -179,7 +183,7 @@ public class Board {
 //				System.out.println("================");
 				
 				//방법2
-			
+				
 				
 				collect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
 				
@@ -194,10 +198,45 @@ public class Board {
 				System.out.println("----------------");
 				System.out.println("================");
 				
+			
+				readfunction();
+				
+			} // --> else문 
+			
+		}// -> while문
+		
+	}
+	
+	private void readfunction() {
+		
+		while(true) {
+			
+			System.out.println("상세보기 기능을 선택해주세요 (1. 댓글 등록, "
+					+ "2. 좋아요, "
+					+ "3. 수정, "
+					+ "4. 삭제, "
+					+ "5. 목록으로) :");
+			
+			int sel = Integer.parseInt(sc.nextLine());
+			
+			if(sel == 1) {
+				System.out.println("[댓글 기능]");
+			}
+			else if(sel == 2) {
+				System.out.println("[좋아요 기능]");
+			}
+			else if(sel == 3) {
+				System.out.println("[수정 기능]");
+			}
+			else if(sel == 4) {
+				System.out.println("[삭제 기능]");
+			}
+			else if(sel == 5) {
+				System.out.println("[목록으로]");
 				break;
 			}
 			
-		}// -> while문
+		}// --> 상세보기 while문
 		
 	}
 
