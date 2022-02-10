@@ -12,7 +12,7 @@ public class Board {
 	ArrayList<Member> members = new ArrayList<>();
 	
 	int collects_num= 4;//게시물 번호
-	int members_num = 3;//멤버 고유 번호(중복 방지)
+	int members_num = 4;//멤버 고유의 번호
 	Member logined_id = null;
 	
 	public Board() {
@@ -122,11 +122,11 @@ public class Board {
 				logined_id = result;
 				break;
 			}
-			else if(is_exist_id == false) {
+			
+		} // -> for문
+			if(is_exist_id == false) {
 				System.out.println("비밀번호를 틀렸거나 잘못된 회원정보입니다.");
 			}
-		} // -> for문
-	
 		
 		
 	}
@@ -411,7 +411,10 @@ public class Board {
 		for(int i = 3; i < list.size(); i++) {
 			
 			Collect collect = list.get(i);
-		
+			collect = setCollectNickname(collect);  
+			//---> collect 생성자에 있는 memeber고유의 id를 통해서 작성자 닉네임을 찾아 저장해준다.
+			// == // 모든 게시물의 닉네임을 작성자에 맞게 세팅
+
 			System.out.println("번호 :" + collect.id);
 			System.out.println("제목 :" + collect.title);
 			System.out.println("작성자 :" + collect.nickname);
@@ -437,8 +440,8 @@ public class Board {
 		for(int i = 0; i < members.size(); i++) {
 			Member member = members.get(i);
 			System.out.println(member.member_nickname + "님 횐영합니다!!");
-			logined_id = member;
-		}
+			logined_id = member;   //testdata의 경우 로그인이 아이디외 비밀번호를 미리 지정해 두기 때문에 list시 자동 로그인이 되게 만들어
+		}							//주었다.
 	}
 	
 	
