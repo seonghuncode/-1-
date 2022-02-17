@@ -10,9 +10,12 @@ public class Board {
 	Scanner sc = new Scanner(System.in);
 	ArrayList<Collect> collects = new ArrayList<>();
 	ArrayList<Member> members = new ArrayList<>();
+	ArrayList<Reply> replies = new ArrayList<>(); 
 	
 	int collects_num= 4;//게시물 번호
 	int members_num = 4;//멤버 고유의 번호
+	int reply_num = 1;
+	String dateFormat = "yyyy-MM-dd";
 	Member logined_id = null;
 	
 	public Board() {
@@ -220,7 +223,7 @@ public class Board {
 			int sel = Integer.parseInt(sc.nextLine());
 			
 			if(sel == 1) {
-				System.out.println("[댓글 기능]");
+				comment();
 			}
 			else if(sel == 2) {
 				System.out.println("[좋아요 기능]");
@@ -239,6 +242,22 @@ public class Board {
 		}// --> 상세보기 while문
 		
 	}
+	
+	private void comment() {
+		System.out.println("===[댓글 기능]===");
+		System.out.print("댓글 내용을 입력해 주세요 :");
+		String write = sc.nextLine();
+		
+		int member_id = logined_id.id;
+		String regDate = My_util.getCurrentDate(dateFormat); // -> 댓글 다는 당시의 시간으로 설정
+		
+		Reply reply = new Reply(reply_num, write, member_id, regDate);
+		replies.add(reply);
+		
+		System.out.println("댓글이 등록 되었습니다.");
+
+		
+	}
 
 
 	private void test_data() {  //우선 collects에 저장을 해놀고 list를 하면 저장된 값이 잘 보여진다.
@@ -248,7 +267,7 @@ public class Board {
 //		collects.add(new Collect(2, "제목2", "입니다", "익명", currentDate, 0));
 //		collects.add(new Collect(3, "제목3", "입니다", "익명", currentDate, 0));
 		
-		String date = My_util.getCurrentDate("yyyy-MM-dd");
+		String date = My_util.getCurrentDate(dateFormat);
 		
 		collects.add(new Collect(1, "제목1", "입니다", 1, date, 0));
 		collects.add(new Collect(2, "제목2", "입니다", 2, date, 0));
@@ -360,7 +379,7 @@ public class Board {
 				String new_body = sc.nextLine();
 			
 				//업데이트시 등록날짜가 변하면 안되므로 등록날짜에 대한 부분 수정 필요=================================================
-				String currnetDate = My_util.getCurrentDate("yyyy-MM-dd");//---------->업데이트시 시간과 조회수 처리 방법??
+				String currnetDate = My_util.getCurrentDate(dateFormat);//---------->업데이트시 시간과 조회수 처리 방법??
 				
 				collect.title = new_title;
 				collect.body = new_body;
@@ -380,7 +399,7 @@ public class Board {
 			System.out.print("내용을 입력해 주세요 :");
 			String body = sc.nextLine();
 			
-			String CurrentDate = My_util.getCurrentDate("yyyy-MM-dd");
+			String CurrentDate = My_util.getCurrentDate(dateFormat);
 			Collect collect = new Collect(collects_num, title, body, logined_id.id, CurrentDate, 0);// --> class의 인스턴스를 만들어 사용한다.
 			collects.add(collect); // --> collects의 배열에 collect를 저장해 준다.
 			
