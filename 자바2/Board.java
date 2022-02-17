@@ -190,19 +190,9 @@ public class Board {
 				
 				collect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
 				
-				System.out.println("===" + collect.id + "게시물 ===");
-				System.out.println("번호 :" + collect.id);
-				System.out.println("제목 :" + collect.title);
-				System.out.println("----------------");
-				System.out.println("내용 :" + collect.body);
-				System.out.println("작성자 :" + collect.nickname);  // 작성자가 숫자로 나온다????
-				System.out.println("작성일" + collect.regDate);
-				System.out.println("조회수" + collect.hit);
-				System.out.println("----------------");
-				System.out.println("================");
+				readInformation(collect);
 				
-			
-				readfunction();
+				readfunction(collect);
 				
 			} // --> else문 
 			
@@ -210,7 +200,44 @@ public class Board {
 		
 	}
 	
-	private void readfunction() {
+	private void readInformation(Collect collect) {
+		System.out.println("===" + collect.id + "게시물 ===");
+		System.out.println("번호 :" + collect.id);
+		System.out.println("제목 :" + collect.title);
+		System.out.println("----------------");
+		System.out.println("내용 :" + collect.body);
+		System.out.println("작성자 :" + collect.nickname);  // 작성자가 숫자로 나온다????
+		System.out.println("작성일" + collect.regDate);
+		System.out.println("조회수" + collect.hit);
+		System.out.println("----------------");
+		System.out.println("================");
+		System.out.println("======댓 글======");
+		for(int i = 0; i < replies.size(); i++) {
+			Reply currentReply = replies.get(i);
+			//현재 게시물과 보여지는 게시물의 댓글을 보여주어야 하므로 대조 해주는 코드가 필요하다.
+			if(currentReply.parentId == collect.id ) {
+				
+				currentReply = setReplyNickname(currentReply);
+				
+				System.out.println("내용 :" + currentReply.command);
+				System.out.println("작성자 :" + currentReply.nickname);
+				System.out.println("작성일 :" + currentReply.regDate);
+				System.out.println("================================");
+			}
+			
+		}
+	}
+	
+	private Reply setReplyNickname(Reply reply) {
+		//null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null을 반환
+		if(reply != null) {
+			Member member = getMemberByMemberNo(reply.member_Id);  //member_Id를 통해 해당 멤버의 정보를 찾는다
+			reply.nickname = member.member_nickname; //reply의 닉네임을 설정해준다
+		}
+		return reply;
+	}
+	
+	private void readfunction(Collect collect) {
 		
 		while(true) {
 			
@@ -223,7 +250,7 @@ public class Board {
 			int sel = Integer.parseInt(sc.nextLine());
 			
 			if(sel == 1) {
-				comment();
+				comment(collect);
 			}
 			else if(sel == 2) {
 				System.out.println("[좋아요 기능]");
@@ -243,7 +270,7 @@ public class Board {
 		
 	}
 	
-	private void comment() {
+	private void comment(Collect collect) {
 		System.out.println("===[댓글 기능]===");
 		System.out.print("댓글 내용을 입력해 주세요 :");
 		String write = sc.nextLine();
@@ -251,10 +278,15 @@ public class Board {
 		int member_id = logined_id.id;
 		String regDate = My_util.getCurrentDate(dateFormat); // -> 댓글 다는 당시의 시간으로 설정
 		
-		Reply reply = new Reply(reply_num, write, member_id, regDate);
+		Reply reply = new Reply(reply_num, collect.id,  write, member_id, regDate);//collect.id를 reply.parentId로 넣어준다.
 		replies.add(reply);
 		
 		System.out.println("댓글이 등록 되었습니다.");
+
+		 readInformation(collect); //댓글 등록후 게시물에 대한 정보를 다시 보여준다.
+		
+		
+		
 
 		
 	}
