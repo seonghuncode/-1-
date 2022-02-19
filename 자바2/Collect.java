@@ -1,14 +1,11 @@
 package 자바2;
 
-public class Collect {
-
-	int id;
+public class Collect extends BaseInfo{
+	
+	//extends를 해주고 받아오게 될것은 가지고 있을 필요가 없으므로 지워준다.(이때 BaseInfo가 더 상위의 개념이다.)
 	String title;
-	String body;
-	int members_id;
-	String regDate;
 	int hit;
-	String nickname; //nickname을 적게만 해주면 되므로 여기에만 적어주어도 된다.
+	
 	// -->출력시 회원의 닉네임을 얻어와 저장하기 위한 용도
 	
 	public Collect(int id, String title, String body, int members_id, String regDate, int hit) {  //생성자를 사용하기 위해 만들어 주어야 한다.

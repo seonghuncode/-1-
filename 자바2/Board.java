@@ -214,12 +214,16 @@ public class Board {
 		System.out.println("======댓 글======");
 		for(int i = 0; i < replies.size(); i++) {
 			Reply currentReply = replies.get(i);
+			
+			BaseInfo info = currentReply; //Baseinfo가 Reply보다 상위 개념이기 때문에 자동형변환으로 이렇게 넣는 것은 가능하다.
+			
 			//현재 게시물과 보여지는 게시물의 댓글을 보여주어야 하므로 대조 해주는 코드가 필요하다.
 			if(currentReply.parentId == collect.id ) {
 				
-				currentReply = setReplyNickname(currentReply);
+				currentReply = (Reply)setNickname(currentReply);
+				//Reply보다 BaseInfo가 상위개념이기 때문에 reply에 baseinfo를 넣으려면 자동형변화이 이루어지지 않기 때문에 수동형변환을 해준다.
 				
-				System.out.println("내용 :" + currentReply.command);
+				System.out.println("내용 :" + currentReply.body);
 				System.out.println("작성자 :" + currentReply.nickname);
 				System.out.println("작성일 :" + currentReply.regDate);
 				System.out.println("================================");
@@ -228,14 +232,14 @@ public class Board {
 		}
 	}
 	
-	private Reply setReplyNickname(Reply reply) {
-		//null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null을 반환
-		if(reply != null) {
-			Member member = getMemberByMemberNo(reply.member_Id);  //member_Id를 통해 해당 멤버의 정보를 찾는다
-			reply.nickname = member.member_nickname; //reply의 닉네임을 설정해준다
-		}
-		return reply;
-	}
+//	private Reply setReplyNickname(Reply reply) {
+//		//null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null을 반환
+//		if(reply != null) {
+//			Member member = getMemberByMemberNo(reply.member_Id);  //member_Id를 통해 해당 멤버의 정보를 찾는다
+//			reply.nickname = member.member_nickname; //reply의 닉네임을 설정해준다
+//		}
+//		return reply;
+//	} setREplyNickname과 setCollectNickname이 중복을 setNickname으로 통일하여 사용해준다.
 	
 	private void readfunction(Collect collect) {
 		
@@ -465,21 +469,34 @@ public class Board {
 			}
 		}
 		//닉네임 세팅
-		targetCollect = setCollectNickname(targetCollect);
+		targetCollect = (Collect)setNickname(targetCollect); //수동 형변환
 		//반환
 		return targetCollect;
 	}
 		
 	
 	// 게시물을 받아 해당 게시물의 작성자 번호에 맞는 작성자 닉네임을 세팅해주는 메서드
-	private Collect setCollectNickname(Collect collect) {
+//	private Collect setCollectNickname(Collect collect) {
+//		// null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null 그대로 반환
+//		if(collect != null) {
+//			Member member = getMemberByMemberNo(collect.members_id);
+//			collect.nickname = member.member_nickname;
+//		}
+//		return collect;
+//	}     setCollectNickname과 setREplyNickname을 하나의 setNickname으로 통일 시켜 사용해준다.
+	
+	
+	// 게시물을 받아 해당 게시물의 작성자 번호에 맞는 작성자 닉네임을 세팅해주는 메서드(setcollectnickname,setreplynickname을 같이 사용)
+	private BaseInfo setNickname(BaseInfo info) {
 		// null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null 그대로 반환
-		if(collect != null) {
-			Member member = getMemberByMemberNo(collect.members_id);
-			collect.nickname = member.member_nickname;
+		if(info != null) {
+			Member member = getMemberByMemberNo(info.members_id);
+			info.nickname = member.member_nickname;
 		}
-		return collect;
-	}
+		return info;
+	}   
+	
+	
 	
 	// 게시물 찾기와 마찬가지로 역시 회원 정보 그 자체를 찾은 것으로 변경
 	private Member getMemberByMemberNo(int memberId) {
@@ -501,7 +518,7 @@ public class Board {
 		for(int i = 3; i < list.size(); i++) {
 			
 			Collect collect = list.get(i);
-			collect = setCollectNickname(collect);  
+			collect = (Collect)setNickname(collect);  
 			//---> collect 생성자에 있는 memeber고유의 id를 통해서 작성자 닉네임을 찾아 저장해준다.
 			// == // 모든 게시물의 닉네임을 작성자에 맞게 세팅
 
