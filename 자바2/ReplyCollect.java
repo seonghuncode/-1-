@@ -1,12 +1,12 @@
 package 자바2;
 
-public class Reply extends BaseInfo {
+public class ReplyCollect extends BaseCollect {
 	
 	
 	int parentId; // -> 부모글 번호
 	
 	
-	public Reply(int id, int parentId, String body, int members_id, String regDate) {
+	public ReplyCollect(int id, int parentId, String body, int members_id, String regDate) {
 		super();
 		this.id = id;
 		this.parentId = parentId;

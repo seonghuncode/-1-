@@ -8,13 +8,13 @@ import 자바2.util.My_util;
 public class Board {
 	
 	Scanner sc = new Scanner(System.in);
-	ArrayList<Collect> collects = new ArrayList<>();
+	ArrayList<BoardCollect> boardCollects = new ArrayList<>();
 	ArrayList<Member> members = new ArrayList<>();
-	ArrayList<Reply> replies = new ArrayList<>(); 
+	ArrayList<ReplyCollect> replies = new ArrayList<>(); 
 	
-	int collects_num= 4;//게시물 번호
+	int boardCollects_num= 4;//게시물 번호
 	int members_num = 4;//멤버 고유의 번호
-	int reply_num = 1;
+	int replyCollect_num = 1;
 	String dateFormat = "yyyy-MM-dd";
 	Member logined_id = null;
 	
@@ -48,7 +48,7 @@ public class Board {
 				}
 			}
 			else if(cmd.equals("list")) {
-				list(collects);
+				list(boardCollects);
 			}
 			else if(cmd.equals("update")) {
 				print_update();
@@ -74,7 +74,7 @@ public class Board {
 				}
 			}
 			else if(cmd.equals("testdata")) {
-				test_list(collects); // --> test_list()때문에 list()사용시 번호가 4번 부터 시작한다.
+				test_list(boardCollects); // --> test_list()때문에 list()사용시 번호가 4번 부터 시작한다.
 			}
 			
 				
@@ -160,39 +160,39 @@ public class Board {
 		
 		
 		while(true) {
-			list(collects);  
+			list(boardCollects);  
 			
 			
 			System.out.print("상세보기할 게시물 번호를 입력 주세요(취소 : 0) :");
 			int read = Integer.parseInt(sc.nextLine());
 			
 			
-			Collect collect = getCollectByNo(read);
+			BoardCollect BoardCollect = getBoardCollectByNo(read);
 			
 			if(read == 0) {
 				break;
 			}
-			else if(collect == null) {
+			else if(BoardCollect == null) {
 				System.out.println("없는 게시물 입니다.");
 			}
 			else {
 //				방법1				
-//				System.out.println("===" + collects.get(read - 1).id + "게시물 ===");
-//				System.out.println("번호 :" + collects.get(read-1).id);
-//				System.out.println("제목 :" + collects.get(read-1).title);
+//				System.out.println("===" + BoardCollects.get(read - 1).id + "게시물 ===");
+//				System.out.println("번호 :" + BoardCollects.get(read-1).id);
+//				System.out.println("제목 :" + BoardCollects.get(read-1).title);
 //				System.out.println("----------------");
-//				System.out.println(collects.get(read-1).body);
+//				System.out.println(BoardCollects.get(read-1).body);
 //				System.out.println("----------------");
 //				System.out.println("================");
 				
 				//방법2
 				
 				
-				collect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
+				BoardCollect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
 				
-				readInformation(collect);
+				readInformation(BoardCollect);
 				
-				readfunction(collect);
+				readfunction(BoardCollect);
 				
 			} // --> else문 
 			
@@ -200,48 +200,48 @@ public class Board {
 		
 	}
 	
-	private void readInformation(Collect collect) {
-		System.out.println("===" + collect.id + "게시물 ===");
-		System.out.println("번호 :" + collect.id);
-		System.out.println("제목 :" + collect.title);
+	private void readInformation(BoardCollect BoardCollect) {
+		System.out.println("===" + BoardCollect.id + "게시물 ===");
+		System.out.println("번호 :" + BoardCollect.id);
+		System.out.println("제목 :" + BoardCollect.title);
 		System.out.println("----------------");
-		System.out.println("내용 :" + collect.body);
-		System.out.println("작성자 :" + collect.nickname);  // 작성자가 숫자로 나온다????
-		System.out.println("작성일" + collect.regDate);
-		System.out.println("조회수" + collect.hit);
+		System.out.println("내용 :" + BoardCollect.body);
+		System.out.println("작성자 :" + BoardCollect.nickname);  // 작성자가 숫자로 나온다????
+		System.out.println("작성일" + BoardCollect.regDate);
+		System.out.println("조회수" + BoardCollect.hit);
 		System.out.println("----------------");
 		System.out.println("================");
 		System.out.println("======댓 글======");
 		for(int i = 0; i < replies.size(); i++) {
-			Reply currentReply = replies.get(i);
+			ReplyCollect currentReplyCollect = replies.get(i);
 			
-			BaseInfo info = currentReply; //Baseinfo가 Reply보다 상위 개념이기 때문에 자동형변환으로 이렇게 넣는 것은 가능하다.
+			BaseCollect info = currentReplyCollect; //BaseCollect가 ReplyCollect보다 상위 개념이기 때문에 자동형변환으로 이렇게 넣는 것은 가능하다.
 			
 			//현재 게시물과 보여지는 게시물의 댓글을 보여주어야 하므로 대조 해주는 코드가 필요하다.
-			if(currentReply.parentId == collect.id ) {
+			if(currentReplyCollect.parentId == BoardCollect.id ) {
 				
-				currentReply = (Reply)setNickname(currentReply);
-				//Reply보다 BaseInfo가 상위개념이기 때문에 reply에 baseinfo를 넣으려면 자동형변화이 이루어지지 않기 때문에 수동형변환을 해준다.
+				currentReplyCollect = (ReplyCollect)setNickname(currentReplyCollect);
+				//ReplyCollect보다 BaseCollect가 상위개념이기 때문에 ReplyCollect에 BaseCollect를 넣으려면 자동형변화이 이루어지지 않기 때문에 수동형변환을 해준다.
 				
-				System.out.println("내용 :" + currentReply.body);
-				System.out.println("작성자 :" + currentReply.nickname);
-				System.out.println("작성일 :" + currentReply.regDate);
+				System.out.println("내용 :" + currentReplyCollect.body);
+				System.out.println("작성자 :" + currentReplyCollect.nickname);
+				System.out.println("작성일 :" + currentReplyCollect.regDate);
 				System.out.println("================================");
 			}
 			
 		}
 	}
 	
-//	private Reply setReplyNickname(Reply reply) {
+//	private ReplyCollect setReplyCollectNickname(ReplyCollect ReplyCollect) {
 //		//null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null을 반환
-//		if(reply != null) {
-//			Member member = getMemberByMemberNo(reply.member_Id);  //member_Id를 통해 해당 멤버의 정보를 찾는다
-//			reply.nickname = member.member_nickname; //reply의 닉네임을 설정해준다
+//		if(ReplyCollect != null) {
+//			Member member = getMemberByMemberNo(ReplyCollect.member_Id);  //member_Id를 통해 해당 멤버의 정보를 찾는다
+//			ReplyCollect.nickname = member.member_nickname; //ReplyCollect의 닉네임을 설정해준다
 //		}
-//		return reply;
-//	} setREplyNickname과 setCollectNickname이 중복을 setNickname으로 통일하여 사용해준다.
+//		return ReplyCollect;
+//	} setReplyCollectNickname과 setBoardCollectNickname이 중복을 setNickname으로 통일하여 사용해준다.
 	
-	private void readfunction(Collect collect) {
+	private void readfunction(BoardCollect BoardCollect) {
 		
 		while(true) {
 			
@@ -254,7 +254,7 @@ public class Board {
 			int sel = Integer.parseInt(sc.nextLine());
 			
 			if(sel == 1) {
-				comment(collect);
+				comment(BoardCollect);
 			}
 			else if(sel == 2) {
 				System.out.println("[좋아요 기능]");
@@ -274,7 +274,7 @@ public class Board {
 		
 	}
 	
-	private void comment(Collect collect) {
+	private void comment(BoardCollect BoardCollect) {
 		System.out.println("===[댓글 기능]===");
 		System.out.print("댓글 내용을 입력해 주세요 :");
 		String write = sc.nextLine();
@@ -282,12 +282,12 @@ public class Board {
 		int member_id = logined_id.id;
 		String regDate = My_util.getCurrentDate(dateFormat); // -> 댓글 다는 당시의 시간으로 설정
 		
-		Reply reply = new Reply(reply_num, collect.id,  write, member_id, regDate);//collect.id를 reply.parentId로 넣어준다.
-		replies.add(reply);
+		ReplyCollect replyCollect = new ReplyCollect(replyCollect_num, BoardCollect.id,  write, member_id, regDate);//BoardCollect.id를 ReplyCollect.parentId로 넣어준다.
+		replies.add(replyCollect);
 		
 		System.out.println("댓글이 등록 되었습니다.");
 
-		 readInformation(collect); //댓글 등록후 게시물에 대한 정보를 다시 보여준다.
+		 readInformation(BoardCollect); //댓글 등록후 게시물에 대한 정보를 다시 보여준다.
 		
 		
 		
@@ -296,23 +296,23 @@ public class Board {
 	}
 
 
-	private void test_data() {  //우선 collects에 저장을 해놀고 list를 하면 저장된 값이 잘 보여진다.
+	private void test_data() {  //우선 BoardCollects에 저장을 해놀고 list를 하면 저장된 값이 잘 보여진다.
 //		String currentDate = My_util.getCurrentDate("yyyy-mm-dd");
 //		
-//		collects.add(new Collect(1, "제목1", "입니다", "익명", currentDate, 0));
-//		collects.add(new Collect(2, "제목2", "입니다", "익명", currentDate, 0));
-//		collects.add(new Collect(3, "제목3", "입니다", "익명", currentDate, 0));
+//		BoardCollects.add(new BoardCollect(1, "제목1", "입니다", "익명", currentDate, 0));
+//		BoardCollects.add(new BoardCollect(2, "제목2", "입니다", "익명", currentDate, 0));
+//		BoardCollects.add(new BoardCollect(3, "제목3", "입니다", "익명", currentDate, 0));
 		
 		String date = My_util.getCurrentDate(dateFormat);
 		
-		collects.add(new Collect(1, "제목1", "입니다", 1, date, 0));
-		collects.add(new Collect(2, "제목2", "입니다", 2, date, 0));
-		collects.add(new Collect(3, "제목3", "입니다", 3, date, 0));
+		boardCollects.add(new BoardCollect(1, "제목1", "입니다", 1, date, 0));
+		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 0));
+		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 0));
 		members.add(new Member(1, "아이디1", "비밀번호1", "닉네임1"));
 		members.add(new Member(2, "아이디2", "비밀번호2", "닉네임2"));
 		members.add(new Member(3, "아이디3", "비밀번호3", "닉네임3"));
 		
-		//collects.add(new Collect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
+		//BoardCollects.add(new BoardCollect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
 		
 		//loginedMember = members.get(0);
 	}
@@ -324,11 +324,11 @@ public class Board {
 //			System.out.print("검색 키워드를 입력해 주세요 :");
 //			String search = sc.nextLine();
 //			
-//			for(int i = 0; i < collects.size(); i++) {
+//			for(int i = 0; i < BoardCollects.size(); i++) {
 //				
-//				if(collects.get(i).title.contains(search)) {
-//					System.out.println(collects.get(i).id);
-//					System.out.println(collects.get(i).title);
+//				if(BoardCollects.get(i).title.contains(search)) {
+//					System.out.println(BoardCollects.get(i).id);
+//					System.out.println(BoardCollects.get(i).title);
 //					System.out.println("=====================");
 //					break;
 //				}
@@ -345,14 +345,14 @@ public class Board {
 		System.out.print("검색어 : ");
 		String keyword = sc.nextLine();
 		
-		ArrayList<Collect> search_collects = new ArrayList<>();
+		ArrayList<BoardCollect> search_BoardCollects = new ArrayList<>();
 		
-		for(int i = 0; i < collects.size(); i++) {
-			if(collects.get(i).title.contains(keyword)) {
-				search_collects.add(collects.get(i));
+		for(int i = 0; i < boardCollects.size(); i++) {
+			if(boardCollects.get(i).title.contains(keyword)) {
+				search_BoardCollects.add(boardCollects.get(i));
 			}
 		}
-		list(search_collects);
+		list(search_BoardCollects);
 		
 	}
 		
@@ -363,7 +363,7 @@ public class Board {
 	private void print_delete() {
 		while(true) {
 			
-			list(collects);
+			list(boardCollects);
 			System.out.print("삭제할 게시물 번호 : ");
 			int target = Integer.parseInt(sc.nextLine());
 			
@@ -376,17 +376,17 @@ public class Board {
 //				}
 //			}
 			
-			Collect collect = getCollectByNo(target);
+			BoardCollect boardCollect = getBoardCollectByNo(target);
 			
-			if(collect == null) {
+			if(boardCollect == null) {
 				System.out.println("없는 게시물 번호 입니다. 다시 입력해 주세요.");
 			}
 			else {
 				
-				collects.remove(collect);
+				boardCollects.remove(boardCollect);
 				
 				System.out.println("게시물이 삭제 되었습니다.");
-				list(collects);
+				list(boardCollects);
 				break;
 			}
 		}
@@ -396,14 +396,14 @@ public class Board {
 		
 		while(true) {
 			
-			list(collects);
+			list(boardCollects);
 			
 			System.out.print("수정할 게시물 번호 :");
 			int target = Integer.parseInt(sc.nextLine());
 			
-			Collect collect = getCollectByNo(target);
+			BoardCollect BoardCollect = getBoardCollectByNo(target);
 			
-			if(collect == null) {
+			if(BoardCollect == null) {
 				System.out.println("없는 게시물 입니다. 다시 입력해 주세요.");
 			}
 			else {
@@ -415,13 +415,13 @@ public class Board {
 				String new_body = sc.nextLine();
 			
 				//업데이트시 등록날짜가 변하면 안되므로 등록날짜에 대한 부분 수정 필요=================================================
-				String currnetDate = My_util.getCurrentDate(dateFormat);//---------->업데이트시 시간과 조회수 처리 방법??
+				//String currnetDate = My_util.getCurrentDate(dateFormat);//---------->업데이트시 시간과 조회수 처리 방법??
 				
-				collect.title = new_title;
-				collect.body = new_body;
+				BoardCollect.title = new_title;
+				BoardCollect.body = new_body;
 				
 				System.out.println("수정이 완료 되었습니다.");
-				list(collects);
+				list(boardCollects);
 				break;
 			}
 		 }
@@ -436,11 +436,11 @@ public class Board {
 			String body = sc.nextLine();
 			
 			String CurrentDate = My_util.getCurrentDate(dateFormat);
-			Collect collect = new Collect(collects_num, title, body, logined_id.id, CurrentDate, 0);// --> class의 인스턴스를 만들어 사용한다.
-			collects.add(collect); // --> collects의 배열에 collect를 저장해 준다.
+			BoardCollect boardCollect = new BoardCollect(boardCollects_num, title, body, logined_id.id, CurrentDate, 0);// --> class의 인스턴스를 만들어 사용한다.
+			boardCollects.add(boardCollect); // --> BoardCollects의 배열에 BoardCollect를 저장해 준다.
 			
 			System.out.println("게시물 저장 되었습니다.");
-			collects_num++;			
+			boardCollects_num++;			
 			// logined.member_nickname -> logined_id.id(이름이 중복되면 구분할 수 없기 때문에 id로 중복되지 않는 값으로 만들어 준다.)
 	}
 
@@ -454,46 +454,46 @@ public class Board {
 
 	// 게시물 데이터를 찾을 때 index가 아닌 게시물 데이터 그 자체를 찾는 것으로 변경
 	// 회원이름을 게시물에 적용시켜 조립된 상태로 얻기 위함.
-	public Collect getCollectByNo(int targetNo) {
+	public BoardCollect getBoardCollectByNo(int targetNo) {
 		
-		Collect targetCollect = null;
+		BoardCollect targetBoardCollect = null;
 		
 		//찾고자 하는 게시물 찾기
-		for(int i = 0; i < collects.size(); i++) {
-			//int current_num = collects.get(i).id;
-			Collect current_num = collects.get(i);  //배열의 순서를 넘겨준것이 아니라 ~번째 배열의 값을 보여준다.(ex.0번째 -> 1저장)
+		for(int i = 0; i < boardCollects.size(); i++) {
+			//int current_num = BoardCollects.get(i).id;
+			BoardCollect current_num = boardCollects.get(i);  //배열의 순서를 넘겨준것이 아니라 ~번째 배열의 값을 보여준다.(ex.0번째 -> 1저장)
 			if(targetNo == current_num.id) {
 			
-				targetCollect = current_num;
+				targetBoardCollect = current_num;
 				break;
 			}
 		}
 		//닉네임 세팅
-		targetCollect = (Collect)setNickname(targetCollect); //수동 형변환
+		targetBoardCollect = (BoardCollect)setNickname(targetBoardCollect); //수동 형변환
 		//반환
-		return targetCollect;
+		return targetBoardCollect;
 	}
 		
 	
 	// 게시물을 받아 해당 게시물의 작성자 번호에 맞는 작성자 닉네임을 세팅해주는 메서드
-//	private Collect setCollectNickname(Collect collect) {
+//	private BoardCollect setBoardCollectNickname(BoardCollect BoardCollect) {
 //		// null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null 그대로 반환
-//		if(collect != null) {
-//			Member member = getMemberByMemberNo(collect.members_id);
-//			collect.nickname = member.member_nickname;
+//		if(BoardCollect != null) {
+//			Member member = getMemberByMemberNo(BoardCollect.members_id);
+//			BoardCollect.nickname = member.member_nickname;
 //		}
-//		return collect;
-//	}     setCollectNickname과 setREplyNickname을 하나의 setNickname으로 통일 시켜 사용해준다.
+//		return BoardCollect;
+//	}     setBoardCollectNickname과 setReplyCollectNickname을 하나의 setNickname으로 통일 시켜 사용해준다.
 	
 	
-	// 게시물을 받아 해당 게시물의 작성자 번호에 맞는 작성자 닉네임을 세팅해주는 메서드(setcollectnickname,setreplynickname을 같이 사용)
-	private BaseInfo setNickname(BaseInfo info) {
+	// 게시물을 받아 해당 게시물의 작성자 번호에 맞는 작성자 닉네임을 세팅해주는 메서드(setBoardCollectnickname,setReplyCollectnickname을 같이 사용)
+	private BaseCollect setNickname(BaseCollect baseCollect) {
 		// null이 아니면 게시물에 닉네임을 세팅해주고 반환 아니면 null 그대로 반환
-		if(info != null) {
-			Member member = getMemberByMemberNo(info.members_id);
-			info.nickname = member.member_nickname;
+		if(baseCollect != null) {
+			Member member = getMemberByMemberNo(baseCollect.members_id);
+			baseCollect.nickname = member.member_nickname;
 		}
-		return info;
+		return baseCollect;
 	}   
 	
 	
@@ -514,34 +514,34 @@ public class Board {
 	}
 	
 	
-	public void list(ArrayList<Collect> list) {
+	public void list(ArrayList<BoardCollect> list) {
 		for(int i = 3; i < list.size(); i++) {
 			
-			Collect collect = list.get(i);
-			collect = (Collect)setNickname(collect);  
-			//---> collect 생성자에 있는 memeber고유의 id를 통해서 작성자 닉네임을 찾아 저장해준다.
+			BoardCollect BoardCollect = list.get(i);
+			BoardCollect = (BoardCollect)setNickname(BoardCollect);  
+			//---> BoardCollect 생성자에 있는 memeber고유의 id를 통해서 작성자 닉네임을 찾아 저장해준다.
 			// == // 모든 게시물의 닉네임을 작성자에 맞게 세팅
 
-			System.out.println("번호 :" + collect.id);
-			System.out.println("제목 :" + collect.title);
-			System.out.println("작성자 :" + collect.nickname);
-			System.out.println("등록날짜 :" + collect.regDate );
-			System.out.println("조회수 :" + collect.hit);
+			System.out.println("번호 :" + BoardCollect.id);
+			System.out.println("제목 :" + BoardCollect.title);
+			System.out.println("작성자 :" + BoardCollect.nickname);
+			System.out.println("등록날짜 :" + BoardCollect.regDate );
+			System.out.println("조회수 :" + BoardCollect.hit);
 			System.out.println("===================");
 		}
 	}
 	
 	
-	public void test_list(ArrayList<Collect> list) {
+	public void test_list(ArrayList<BoardCollect> list) {
 		for(int i = 0; i < list.size(); i++) {
 			
-			Collect collect = list.get(i);
+			BoardCollect BoardCollect = list.get(i);
 		
-			System.out.println("번호 :" + collect.id);
-			System.out.println("제목 :" + collect.title);
-			System.out.println("작성자 :" + collect.members_id);
-			System.out.println("등록날짜 :" + collect.regDate );
-			System.out.println("조회수 :" + collect.hit);
+			System.out.println("번호 :" + BoardCollect.id);
+			System.out.println("제목 :" + BoardCollect.title);
+			System.out.println("작성자 :" + BoardCollect.members_id);
+			System.out.println("등록날짜 :" + BoardCollect.regDate );
+			System.out.println("조회수 :" + BoardCollect.hit);
 			System.out.println("===================");
 		}
 		for(int i = 0; i < members.size(); i++) {
