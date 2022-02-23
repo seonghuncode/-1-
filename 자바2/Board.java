@@ -121,13 +121,15 @@ public class Board {
 			Member result = members.get(i);
 			if(result.member_id.equals(id) && result.member_pw.equals(pw)) {  //문자를 비교할때는 .equals() 시용.
 
-				if(result instanceof SpecialMember) {
-					SpecialMember specialmember = (SpecialMember)result;//result의 상황에서 point를 사용하기 위해서는 spcialmember에 넣어주고 형변환을 해주어야 한다.
-					System.out.println("안녕하게요 우수회원" + result.member_nickname + "님 사랑합니다. 회원님의 남은 포인트는 현재" + specialmember.point + "입니다.");
-				}
-				else if(result instanceof GeneralMember) {
-					System.out.println("안녕하세요 일반회원" + result.member_nickname + "님 환영 합니다!!");
-				}
+//				if(result instanceof SpecialMember) {
+//					SpecialMember specialmember = (SpecialMember)result;//result의 상황에서 point를 사용하기 위해서는 spcialmember에 넣어주고 형변환을 해주어야 한다.
+//					System.out.println("안녕하게요 우수회원" + result.member_nickname + "님 사랑합니다. 회원님의 남은 포인트는 현재" + specialmember.point + "입니다.");
+//				}
+//				else if(result instanceof GeneralMember) {
+//					System.out.println("안녕하세요 일반회원" + result.member_nickname + "님 환영 합니다!!");
+//				}
+				
+				result.greeting();  //위의 instanceof를 사용하지 않고 더 간단하게 하는 방법.
 				
 				is_exist_id = true;
 				logined_id = result;
@@ -330,7 +332,7 @@ public class Board {
 		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 0));
 		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
 		members.add(new GeneralMember(2, "아이디2", "비밀번호2", "닉네임2"));
-		members.add(new GeneralMember(3, "아이디3", "비밀번호3", "닉네임3"));
+		members.add(new SpecialMember(3, "아이디3", "비밀번호3", "닉네임3", 0));
 		
 		//BoardCollects.add(new BoardCollect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
 		

@@ -13,4 +13,8 @@ public class SpecialMember extends Member {
 		this.point = point;
 	}
 	
+	public void greeting() {
+		System.out.println("안녕하세요 우수회원" + member_nickname + "님 사랑합니다. 회원님의 남은 포인트는 현재" + point + "입니다.");
+	}
+	
 }
