@@ -120,7 +120,15 @@ public class Board {
 		for(int i = 0; i < members.size(); i++) {
 			Member result = members.get(i);
 			if(result.member_id.equals(id) && result.member_pw.equals(pw)) {  //문자를 비교할때는 .equals() 시용.
-				System.out.println(result.member_nickname + "님 환영 합니다!!");
+
+				if(result instanceof SpecialMember) {
+					SpecialMember specialmember = (SpecialMember)result;//result의 상황에서 point를 사용하기 위해서는 spcialmember에 넣어주고 형변환을 해주어야 한다.
+					System.out.println("안녕하게요 우수회원" + result.member_nickname + "님 사랑합니다. 회원님의 남은 포인트는 현재" + specialmember.point + "입니다.");
+				}
+				else if(result instanceof GeneralMember) {
+					System.out.println("안녕하세요 일반회원" + result.member_nickname + "님 환영 합니다!!");
+				}
+				
 				is_exist_id = true;
 				logined_id = result;
 				break;
@@ -139,6 +147,10 @@ public class Board {
 
 		System.out.println("=== 회원가입을 진행 합니다 ===");
 		
+		int sel = 0;
+		System.out.print("원하는 회원 유형을 선택해 주세요(1. 우수회원 2. 일반회원) :");
+		sel = Integer.parseInt(sc.nextLine());
+	
 		System.out.print("아이디를 입력해 주세요 :");
 		String my_id = sc.nextLine();
 	
@@ -148,8 +160,16 @@ public class Board {
 		System.out.print("닉네임을 입력해 주세요 :");
 		String nickname = sc.nextLine();
 		
-		Member member = new Member(members_num, my_id, my_pw, nickname);//Member의 member라는 인스턴스를 만들어 그에 맞게 저장을 해준다?
-		members.add(member);  //그 후 members에 member를 통으로 저장한다.
+		Member member = null;
+		
+		if(sel == 1) {
+			 member = new SpecialMember(members_num, my_id, my_pw, nickname, 0);
+		}
+		else if(sel == 2) {
+			member = new GeneralMember(members_num, my_id, my_pw, nickname);
+		}
+		
+		members.add(member);
 		
 		System.out.println("=== 회원가입이 완료 되었습니다 ===");
 		members_num++;
@@ -308,9 +328,9 @@ public class Board {
 		boardCollects.add(new BoardCollect(1, "제목1", "입니다", 1, date, 0));
 		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 0));
 		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 0));
-		members.add(new Member(1, "아이디1", "비밀번호1", "닉네임1"));
-		members.add(new Member(2, "아이디2", "비밀번호2", "닉네임2"));
-		members.add(new Member(3, "아이디3", "비밀번호3", "닉네임3"));
+		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
+		members.add(new GeneralMember(2, "아이디2", "비밀번호2", "닉네임2"));
+		members.add(new GeneralMember(3, "아이디3", "비밀번호3", "닉네임3"));
 		
 		//BoardCollects.add(new BoardCollect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
 		
