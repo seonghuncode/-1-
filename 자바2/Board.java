@@ -11,10 +11,12 @@ public class Board {
 	ArrayList<BoardCollect> boardCollects = new ArrayList<>();
 	ArrayList<Member> members = new ArrayList<>();
 	ArrayList<ReplyCollect> replies = new ArrayList<>(); 
+	ArrayList<Like> likes = new ArrayList<>();
 	
 	int boardCollects_num= 4;//게시물 번호
 	int members_num = 4;//멤버 고유의 번호
 	int replyCollect_num = 1;
+	
 	String dateFormat = "yyyy-MM-dd";
 	Member logined_id = null;
 	
@@ -189,12 +191,12 @@ public class Board {
 			int read = Integer.parseInt(sc.nextLine());
 			
 			
-			BoardCollect BoardCollect = getBoardCollectByNo(read);
+			BoardCollect boardCollect = getBoardCollectByNo(read);
 			
 			if(read == 0) {
 				break;
 			}
-			else if(BoardCollect == null) {
+			else if(boardCollect == null) {
 				System.out.println("없는 게시물 입니다.");
 			}
 			else {
@@ -210,11 +212,11 @@ public class Board {
 				//방법2
 				
 				
-				BoardCollect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
+				boardCollect.hit++; // 상세보기(read)할때마다 조회수를 증가시켜 저장한다.
 				
-				readInformation(BoardCollect);
+				readInformation(boardCollect);
 				
-				readfunction(BoardCollect);
+				readfunction(boardCollect);
 				
 			} // --> else문 
 			
@@ -222,25 +224,25 @@ public class Board {
 		
 	}
 	
-	private void readInformation(BoardCollect BoardCollect) {
-		System.out.println("===" + BoardCollect.id + "게시물 ===");
-		System.out.println("번호 :" + BoardCollect.id);
-		System.out.println("제목 :" + BoardCollect.title);
+	private void readInformation(BoardCollect boardCollect) {
+		System.out.println("===" + boardCollect.id + "게시물 ===");
+		System.out.println("번호 :" + boardCollect.id);
+		System.out.println("제목 :" + boardCollect.title);
 		System.out.println("----------------");
-		System.out.println("내용 :" + BoardCollect.body);
-		System.out.println("작성자 :" + BoardCollect.nickname);  // 작성자가 숫자로 나온다????
-		System.out.println("작성일" + BoardCollect.regDate);
-		System.out.println("조회수" + BoardCollect.hit);
+		System.out.println("내용 :" + boardCollect.body);
+		System.out.println("작성자 :" + boardCollect.nickname);  // 작성자가 숫자로 나온다????
+		System.out.println("작성일" + boardCollect.regDate);
+		System.out.println("조회수" + boardCollect.hit);
 		System.out.println("----------------");
 		System.out.println("================");
 		System.out.println("======댓 글======");
 		for(int i = 0; i < replies.size(); i++) {
 			ReplyCollect currentReplyCollect = replies.get(i);
 			
-			BaseCollect info = currentReplyCollect; //BaseCollect가 ReplyCollect보다 상위 개념이기 때문에 자동형변환으로 이렇게 넣는 것은 가능하다.
+			
 			
 			//현재 게시물과 보여지는 게시물의 댓글을 보여주어야 하므로 대조 해주는 코드가 필요하다.
-			if(currentReplyCollect.parentId == BoardCollect.id ) {
+			if(currentReplyCollect.parentId == boardCollect.id ) {
 				
 				currentReplyCollect = (ReplyCollect)setNickname(currentReplyCollect);
 				//ReplyCollect보다 BaseCollect가 상위개념이기 때문에 ReplyCollect에 BaseCollect를 넣으려면 자동형변화이 이루어지지 않기 때문에 수동형변환을 해준다.
@@ -263,7 +265,7 @@ public class Board {
 //		return ReplyCollect;
 //	} setReplyCollectNickname과 setBoardCollectNickname이 중복을 setNickname으로 통일하여 사용해준다.
 	
-	private void readfunction(BoardCollect BoardCollect) {
+	private void readfunction(BoardCollect boardCollect) {
 		
 		while(true) {
 			
@@ -276,10 +278,17 @@ public class Board {
 			int sel = Integer.parseInt(sc.nextLine());
 			
 			if(sel == 1) {
-				comment(BoardCollect);
+				comment(boardCollect);
 			}
 			else if(sel == 2) {
 				System.out.println("[좋아요 기능]");
+				//boardCollect ==> 현재 게시물에 대한 정보를 담고 있다.(매개뱐수로 받고 있는 boardCollect를 초입 까지 따라가서 이해.)
+				Like like = new Like(boardCollect.id, logined_id.id, My_util.getCurrentDate(dateFormat));
+				// 1. 어떤 게시물? -> 게시물 번호
+				// 2. 누가 체크했나? -> 회원 번호
+				// 3. 언제 작성됐는가? -> 등록날짜
+				likes.add(like);
+				System.out.println("해당 게시물을 좋아요 합니다.");
 			}
 			else if(sel == 3) {
 				System.out.println("[수정 기능]");
@@ -295,6 +304,10 @@ public class Board {
 		}// --> 상세보기 while문
 		
 	}
+	
+	
+	
+	
 	
 	private void comment(BoardCollect BoardCollect) {
 		System.out.println("===[댓글 기능]===");
