@@ -233,6 +233,14 @@ public class Board {
 		System.out.println("작성자 :" + boardCollect.nickname);  // 작성자가 숫자로 나온다????
 		System.out.println("작성일" + boardCollect.regDate);
 		System.out.println("조회수" + boardCollect.hit);
+		
+		Like like = checkExistLike(boardCollect.id, logined_id.id);
+		if(like == null) {
+			System.out.println("좋아요 : ♥" + coutLike(boardCollect.id));
+		}
+		else {
+			System.out.println("좋아요 : ♡" + coutLike(boardCollect.id));
+		}
 		System.out.println("----------------");
 		System.out.println("================");
 		System.out.println("======댓 글======");
@@ -293,13 +301,15 @@ public class Board {
 					// 3. 언제 작성됐는가? -> 등록날짜
 					likes.add(check);
 					System.out.println("해당 게시물을 좋아요 합니다.");
+				
 				}
 				else {
 					likes.remove(check);
 					System.out.println("해당 게시물 좋아요를 취소합니다.");
+					
 				}
 			
-				
+				readInformation(boardCollect);
 				
 			}
 			else if(sel == 3) {
@@ -315,6 +325,21 @@ public class Board {
 			
 		}// --> 상세보기 while문
 		
+	}
+	
+	
+	public int coutLike(int collectId) {
+		//매개변수로 boardCollect.id를 받는다
+		int cnt = 0;
+		
+		for(int i = 0; i < likes.size(); i++) {
+			Like like = likes.get(i);
+			if(like.collectId == collectId) {
+		//likes에 들어 있는 collectId랑  현재게시물의 collectId(boardCollect.id)가 같을때 마다 cnt를 증가시켜 저장한다.
+				cnt++;
+			}
+		}
+		return cnt;
 	}
 	
 	
