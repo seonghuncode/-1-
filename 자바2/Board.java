@@ -283,12 +283,24 @@ public class Board {
 			else if(sel == 2) {
 				System.out.println("[좋아요 기능]");
 				//boardCollect ==> 현재 게시물에 대한 정보를 담고 있다.(매개뱐수로 받고 있는 boardCollect를 초입 까지 따라가서 이해.)
-				Like like = new Like(boardCollect.id, logined_id.id, My_util.getCurrentDate(dateFormat));
-				// 1. 어떤 게시물? -> 게시물 번호
-				// 2. 누가 체크했나? -> 회원 번호
-				// 3. 언제 작성됐는가? -> 등록날짜
-				likes.add(like);
-				System.out.println("해당 게시물을 좋아요 합니다.");
+				
+				
+				Like check = checkExistLike(boardCollect.id, logined_id.id);
+				if(check == null) {
+					check = new Like(boardCollect.id, logined_id.id, My_util.getCurrentDate(dateFormat));
+					// 1. 어떤 게시물? -> 게시물 번호
+					// 2. 누가 체크했나? -> 회원 번호
+					// 3. 언제 작성됐는가? -> 등록날짜
+					likes.add(check);
+					System.out.println("해당 게시물을 좋아요 합니다.");
+				}
+				else {
+					likes.remove(check);
+					System.out.println("해당 게시물 좋아요를 취소합니다.");
+				}
+			
+				
+				
 			}
 			else if(sel == 3) {
 				System.out.println("[수정 기능]");
@@ -306,6 +318,16 @@ public class Board {
 	}
 	
 	
+	private Like  checkExistLike(int collectId, int loginedId) {
+		
+		for(int i = 0; i < likes.size(); i++) {
+			Like like = likes.get(i);
+			if(like.memberId == loginedId && like.collectId == collectId) {
+				return like;
+			}
+		}
+		return null;
+	}
 	
 	
 	
