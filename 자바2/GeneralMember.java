@@ -14,5 +14,5 @@ public class GeneralMember extends Member{
 	public void greeting() {
 		System.out.println("안녕하세요 일반회원" + member_nickname + "님 반갑습니다");
 	}
-	
+	 
 }

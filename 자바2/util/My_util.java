@@ -15,5 +15,5 @@ public class My_util {
 		// 결과 출력 
 		return formatedNow;
 	}
-	
+	 
 }

@@ -16,5 +16,5 @@ public class BoardCollect extends BaseCollect{
 		this.regDate = regDate;
 		this.hit = hit;
 	}
-	
+	 
 }

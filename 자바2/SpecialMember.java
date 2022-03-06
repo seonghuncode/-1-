@@ -1,5 +1,5 @@
 package 자바2;
-
+ 
 public class SpecialMember extends Member {
 
 	int point;

@@ -9,4 +9,5 @@ public class BaseCollect {
 	int members_id;
 	String nickname;
 	
+	
 }
