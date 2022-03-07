@@ -104,9 +104,14 @@ public class Board {
 		System.out.println("정렬 방법을 선택해주세요. (1. 오름차순,  2. 내림차순) :");
 		int sel2 = Integer.parseInt(sc.nextLine());
 		
+		if(sel1 < 0 || sel1 > 2 && sel2 < 0 || sel2 > 2 ) {
+			System.out.println("sort기능의 선택이 틀렸습니다!!");
+		}
+		else {
+			Collections.sort(boardCollects, new selectSort(sel1, sel2));
+			list(boardCollects);			
+		}
 		
-		Collections.sort(boardCollects, new selectSort());
-		list(boardCollects);
 	
 	
 	}
@@ -115,16 +120,78 @@ public class Board {
 	
 	public class selectSort implements Comparator<BoardCollect> {
 		//id로 비교했을때 
+		
+		int sel1;
+		int sel2;
+		
+		selectSort(int sel1, int sel2){
+			this.sel1 = sel1;
+			this.sel2 = sel2;
+		}
+		
+		
 		@Override
 		public int compare(BoardCollect o1, BoardCollect o2) {
 			
+//			if(sel1 == 1 && sel2 == 1) {
+//				if(o1.id > o2.id) {
+//					return 1;
+//				}
+//			}
+//			else if(sel1 == 1 && sel2 == 2) {
+//				if(o1.id < o1.id) {
+//					return 1;
+//				}
+//			}
+//			else if(sel1 == 2 && sel2 ==1) {
+//				if(o1.hit > o2.hit) {
+//					return 1;
+//				}
+//			}
+//			else if(sel1 == 2 && sel2 == 2) {
+//				if(o1.hit < o2.hit) {
+//					return 1;
+//				}
+//			}
+//				
+//			
+//			return -1;
+//		}
+			
+			
+		//강사님 코드
+		int result = getCompareResult(o1, o2);
+		
+			if(sel2 == 2) {
+				result *= -1;
+			}
+			return result;
+		
+	}
+		
+		
+		
+	
+	public int getCompareResult(BoardCollect o1, BoardCollect o2) {
+		if(sel1 == 1) {
+			if(o1.id > o2.id) {
+				return 1;
+			}
+			
+		}
+		else if(sel1 == 2) {
 			if(o1.hit > o2.hit) {
 				return 1;
 			}
-			return -1;
+			
 		}
+		return -1;
 		
+	 }
 	}
+	
+		
+		
 
 
 	private boolean check_login() {
