@@ -1,6 +1,8 @@
 package 자바2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import 자바2.util.My_util;
@@ -78,6 +80,9 @@ public class Board {
 			else if(cmd.equals("testdata")) {
 				test_list(boardCollects); // --> test_list()때문에 list()사용시 번호가 4번 부터 시작한다.
 			}
+			else if(cmd.equals("sort")) {
+				print_sort();
+			}
 			
 				
 						
@@ -92,6 +97,36 @@ public class Board {
 
 	} //---------------------------------------------------------------------------->public class
 	
+	private void print_sort() {
+		System.out.print("정렬 대상을 선택해 주세요 : 1. 번호, 2. 조회수");
+		int sel1 = Integer.parseInt(sc.nextLine());
+		
+		System.out.println("정렬 방법을 선택해주세요. (1. 오름차순,  2. 내림차순) :");
+		int sel2 = Integer.parseInt(sc.nextLine());
+		
+		
+		Collections.sort(boardCollects, new selectSort());
+		list(boardCollects);
+	
+	
+	}
+	
+	
+	
+	public class selectSort implements Comparator<BoardCollect> {
+		//id로 비교했을때 
+		@Override
+		public int compare(BoardCollect o1, BoardCollect o2) {
+			
+			if(o1.hit > o2.hit) {
+				return 1;
+			}
+			return -1;
+		}
+		
+	}
+
+
 	private boolean check_login() {
 		if(logined_id == null) {
 			System.out.println("로그인이 필요한 기능입니다. 로그인 후 사용해 주세요.");
@@ -387,9 +422,9 @@ public class Board {
 		
 		String date = My_util.getCurrentDate(dateFormat);
 		
-		boardCollects.add(new BoardCollect(1, "제목1", "입니다", 1, date, 0));
-		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 0));
-		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 0));
+		boardCollects.add(new BoardCollect(1, "제목1", "입니다", 1, date, 20));
+		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 11));
+		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 23));
 		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
 		members.add(new GeneralMember(2, "아이디2", "비밀번호2", "닉네임2"));
 		members.add(new SpecialMember(3, "아이디3", "비밀번호3", "닉네임3", 0));
@@ -597,7 +632,7 @@ public class Board {
 	
 	
 	public void list(ArrayList<BoardCollect> list) {
-		for(int i = 3; i < list.size(); i++) {
+		for(int i = 0; i < list.size(); i++) {
 			
 			BoardCollect BoardCollect = list.get(i);
 			BoardCollect = (BoardCollect)setNickname(BoardCollect);  
