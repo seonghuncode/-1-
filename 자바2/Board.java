@@ -83,6 +83,9 @@ public class Board {
 			else if(cmd.equals("sort")) {
 				print_sort();
 			}
+			else if(cmd.equals("page")) {
+				print_page(boardCollects);
+			}
 			
 				
 						
@@ -97,6 +100,115 @@ public class Board {
 
 	} //---------------------------------------------------------------------------->public class
 	
+	
+	
+	
+	private void print_page(ArrayList<BoardCollect> boardCollects) {
+		
+		
+		
+		for(int i = 0; i < 3; i++) {
+		BoardCollect paging = boardCollects.get(i);
+		paging = (BoardCollect)setNickname(paging); 
+		//paging에 값이 있다면 비교 메서드를 통해 paging에 닉네임을 넣어준다.
+		
+		 System.out.println("번호 :" + paging.id);
+		 System.out.println("제목 :" + paging.title);
+		 System.out.println("작성자 :" + paging.nickname);
+		 System.out.println("조회수 :" + paging.hit);
+		 likefunction(paging);
+		 System.out.println("================");
+		
+		}
+		//페이지 번호 기능 만들기
+		showPageNum();
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	private void showPageNum() {
+		
+		
+//		현재페이지 : 1 ~ 5 -> 블럭1
+//		현재페이지 : 5 ~ 10 -> 블럭2
+//		현재페이지 : 11 ~ 15 -> 블럭3
+//		
+//		1/5 -> 0...
+//		2/5
+//		3/5
+//		4/5
+//		5/5 -> 1
+//		
+//		6/5 -> 1..
+//		7/5
+//		8/5
+//		9/5
+//		10/5 -> 2
+//		
+//      *현재 페이지 블럭*
+//		int currentBlockNum = (int)Math.ceil((double)currentPageNum/5);
+		
+		
+//		현재블럭(1) => 1~5   -> (5*0) + 1 ~ 5   
+//		현재블럭(2) => 6~10  -> (5*1) + 1 ~ 10		
+//		현재블럭(3) => 11~15 -> (5*2) + 1 ~ 15
+//		
+//		****==>
+//		현재페이지블럭 시작번호 == (5 * (현재블럭번호 - 1)) + 1
+//		현재블럭의 시작 번호 + 4 ==> 마지막 블럭 번호
+		
+		
+		int currentNum = 1;
+		
+		while(true) {
+			
+			int currentBlockNum = (int)Math.ceil((double)currentNum/5);
+			int startNum = (5 * (currentBlockNum - 1)) + 1;
+			int endNum = startNum + 4;
+		
+		for(int i = startNum; i <= endNum; i++) {
+			
+			if(currentNum == i) {
+				System.out.print("[" + i + "}");
+			}
+			else {
+				System.out.print(i + " "); //위가 아닐경우 그냥 숫자만 보여주고 띄우기.
+			}
+		}
+		
+		System.out.println(">>");
+		
+		
+		System.out.print("원하는 기능을 눌러 주세요(1.뒤로/2.다음/3.선택/4.뒤로가기) :");
+		int move = Integer.parseInt(sc.nextLine());
+		
+		if(move == 1) {
+			currentNum--;
+		}
+		else if(move == 2) {
+			currentNum++;
+		}
+		else if(move == 3) {
+			
+		}
+		else if(move == 4) {
+			break;
+		}
+		
+		
+		
+		}
+		
+	}
+	
+
+
 	private void print_sort() {
 		System.out.print("정렬 대상을 선택해 주세요 : 1. 번호, 2. 조회수");
 		int sel1 = Integer.parseInt(sc.nextLine());
@@ -332,37 +444,31 @@ public class Board {
 		System.out.println("제목 :" + boardCollect.title);
 		System.out.println("----------------");
 		System.out.println("내용 :" + boardCollect.body);
-		System.out.println("작성자 :" + boardCollect.nickname);  // 작성자가 숫자로 나온다????
+		System.out.println("작성자 :" + boardCollect.nickname); // 작성자가 숫자로 나온다????
 		System.out.println("작성일" + boardCollect.regDate);
 		System.out.println("조회수" + boardCollect.hit);
-		
-		Like like = checkExistLike(boardCollect.id, logined_id.id);
-		if(like == null) {
-			System.out.println("좋아요 : ♥" + coutLike(boardCollect.id));
-		}
-		else {
-			System.out.println("좋아요 : ♡" + coutLike(boardCollect.id));
-		}
+
+		likefunction(boardCollect);
+
 		System.out.println("----------------");
 		System.out.println("================");
 		System.out.println("======댓 글======");
-		for(int i = 0; i < replies.size(); i++) {
+		for (int i = 0; i < replies.size(); i++) {
 			ReplyCollect currentReplyCollect = replies.get(i);
-			
-			
-			
-			//현재 게시물과 보여지는 게시물의 댓글을 보여주어야 하므로 대조 해주는 코드가 필요하다.
-			if(currentReplyCollect.parentId == boardCollect.id ) {
-				
-				currentReplyCollect = (ReplyCollect)setNickname(currentReplyCollect);
-				//ReplyCollect보다 BaseCollect가 상위개념이기 때문에 ReplyCollect에 BaseCollect를 넣으려면 자동형변화이 이루어지지 않기 때문에 수동형변환을 해준다.
-				
+
+			// 현재 게시물과 보여지는 게시물의 댓글을 보여주어야 하므로 대조 해주는 코드가 필요하다.
+			if (currentReplyCollect.parentId == boardCollect.id) {
+
+				currentReplyCollect = (ReplyCollect) setNickname(currentReplyCollect);
+				// ReplyCollect보다 BaseCollect가 상위개념이기 때문에 ReplyCollect에 BaseCollect를 넣으려면 자동형변화이
+				// 이루어지지 않기 때문에 수동형변환을 해준다.
+
 				System.out.println("내용 :" + currentReplyCollect.body);
 				System.out.println("작성자 :" + currentReplyCollect.nickname);
 				System.out.println("작성일 :" + currentReplyCollect.regDate);
 				System.out.println("================================");
 			}
-			
+
 		}
 	}
 	
@@ -374,6 +480,21 @@ public class Board {
 //		}
 //		return ReplyCollect;
 //	} setReplyCollectNickname과 setBoardCollectNickname이 중복을 setNickname으로 통일하여 사용해준다.
+	
+	private void likefunction(BoardCollect boardCollect) {
+		
+
+		Like like = checkExistLike(boardCollect.id, logined_id.id);
+		if(like == null) {
+			System.out.println("좋아요 : ♥" + coutLike(boardCollect.id));
+		}
+		else {
+			System.out.println("좋아요 : ♡" + coutLike(boardCollect.id));
+		}
+		
+		
+	}
+	
 	
 	private void readfunction(BoardCollect boardCollect) {
 		
