@@ -105,9 +105,19 @@ public class Board {
 	
 	private void print_page(ArrayList<BoardCollect> boardCollects) {
 		
+		int currentNum = 1;
+		int currentBlockNum = (int)Math.ceil((double)currentNum/5);
+		int startNum = (5 * (currentBlockNum - 1)) + 1;
+		int endNum = startNum + 4;
 		
+		while(true) {
+			
+			
+			//게시물을 보여주는 시작수와 끝수를 정해주는 코드
+			int startCollectNum = 3 * (currentNum - 1);
+			int endCollectNum = startCollectNum + 3;
 		
-		for(int i = 0; i < 3; i++) {
+		for(int i = startCollectNum; i < endCollectNum; i++) {
 		BoardCollect paging = boardCollects.get(i);
 		paging = (BoardCollect)setNickname(paging); 
 		//paging에 값이 있다면 비교 메서드를 통해 paging에 닉네임을 넣어준다.
@@ -119,66 +129,17 @@ public class Board {
 		 likefunction(paging);
 		 System.out.println("================");
 		
-		}
+		}// -->첫 for문
+		
+			
 		//페이지 번호 기능 만들기
-		showPageNum();
-		
-		
-		
-		
-		
-		
-		
-	}
-	
-	
-	private void showPageNum() {
-		
-		
-//		현재페이지 : 1 ~ 5 -> 블럭1
-//		현재페이지 : 5 ~ 10 -> 블럭2
-//		현재페이지 : 11 ~ 15 -> 블럭3
-//		
-//		1/5 -> 0...
-//		2/5
-//		3/5
-//		4/5
-//		5/5 -> 1
-//		
-//		6/5 -> 1..
-//		7/5
-//		8/5
-//		9/5
-//		10/5 -> 2
-//		
-//      *현재 페이지 블럭*
-//		int currentBlockNum = (int)Math.ceil((double)currentPageNum/5);
-		
-		
-//		현재블럭(1) => 1~5   -> (5*0) + 1 ~ 5   
-//		현재블럭(2) => 6~10  -> (5*1) + 1 ~ 10		
-//		현재블럭(3) => 11~15 -> (5*2) + 1 ~ 15
-//		
-//		****==>
-//		현재페이지블럭 시작번호 == (5 * (현재블럭번호 - 1)) + 1
-//		현재블럭의 시작 번호 + 4 ==> 마지막 블럭 번호
-		
-		
-		int currentNum = 1;
-		
-		while(true) {
+		for(int j = startNum; j <= endNum; j++) {
 			
-			int currentBlockNum = (int)Math.ceil((double)currentNum/5);
-			int startNum = (5 * (currentBlockNum - 1)) + 1;
-			int endNum = startNum + 4;
-		
-		for(int i = startNum; i <= endNum; i++) {
-			
-			if(currentNum == i) {
-				System.out.print("[" + i + "}");
+			if(currentNum == j) {
+				System.out.print("[" + j + "}");
 			}
 			else {
-				System.out.print(i + " "); //위가 아닐경우 그냥 숫자만 보여주고 띄우기.
+				System.out.print(j + " "); //위가 아닐경우 그냥 숫자만 보여주고 띄우기.
 			}
 		}
 		
@@ -203,9 +164,13 @@ public class Board {
 		
 		
 		
-		}
+	  }
+		
 		
 	}
+	
+	
+	
 	
 
 
@@ -610,12 +575,18 @@ public class Board {
 		
 		String date = My_util.getCurrentDate(dateFormat);
 		
-		boardCollects.add(new BoardCollect(1, "제목1", "입니다", 1, date, 20));
-		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 11));
-		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 23));
-		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
-		members.add(new GeneralMember(2, "아이디2", "비밀번호2", "닉네임2"));
-		members.add(new SpecialMember(3, "아이디3", "비밀번호3", "닉네임3", 0));
+//		boardCollects.add(new BoardCollect(1, "제목1", "입니다", 1, date, 20));
+//		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 11));
+//		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 23));
+		
+		//페이지 기능이 잘 되는 지 확인하기 위해서 여러 test_data를 여러개 만들어 준다.
+		for(int i = 1; i < 25; i++) {
+			boardCollects.add(new BoardCollect(i, "제목"+i, "입니다", i, date, 23));
+			members.add(new GeneralMember(i, "아이디"+i, "비밀번호"+i, "닉네임"+i));
+		}
+//		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
+//		members.add(new GeneralMember(2, "아이디2", "비밀번호2", "닉네임2"));
+//		members.add(new SpecialMember(3, "아이디3", "비밀번호3", "닉네임3", 0));
 		
 		//BoardCollects.add(new BoardCollect(3, "제목3", "입니다", members.get(2).member_nickname, date, 0));
 		
