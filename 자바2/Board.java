@@ -14,7 +14,7 @@ public class Board {
 	ArrayList<Member> members = new ArrayList<>();
 	ArrayList<ReplyCollect> replies = new ArrayList<>(); 
 	ArrayList<Like> likes = new ArrayList<>();
-	PageFactor factor = new PageFactor();	
+	PageFactor factor;
 	
 	int boardCollects_num= 4;//게시물 번호
 	int members_num = 4;//멤버 고유의 번호
@@ -25,6 +25,9 @@ public class Board {
 	
 	public Board() {
 		test_data();
+		//프로그램 시작전 저장되어 있는 게시물 갯수를 세어 넣어 준다.
+		factor = new PageFactor(boardCollects.size());
+		
 	}
 	
 	
@@ -106,6 +109,7 @@ public class Board {
 	
 	private void print_page(ArrayList<BoardCollect> boardCollects) {
 		
+		 
 		
 		while(true) {
 			
@@ -121,6 +125,8 @@ public class Board {
 		 System.out.println("조회수 :" + paging.hit);
 		 likefunction(paging);
 		 System.out.println("================");
+		 
+		
 		
 		}// -->첫 for문
 		
@@ -138,15 +144,34 @@ public class Board {
 		
 		System.out.println(">>");
 		
+		System.out.println("=============================");
+		System.out.println("첫 페이지 수:" + factor.startNum());
+		System.out.println("마지막 페이지 수 :" + factor.LastPageNum());
+		System.out.println("=============================");
+		
 		
 		System.out.print("원하는 기능을 눌러 주세요(1.뒤로/2.다음/3.선택/4.뒤로가기) :");
 		int move = Integer.parseInt(sc.nextLine());
 		
+		
+		
+		
 		if(move == 1) {
-			factor.currentNum--;
+				
+			if(factor.currentNum <= 1) {
+				System.out.println("첫 번째 페이지 입니다.");
+			}
+			else {
+				factor.currentNum--;
+			}
 		}
 		else if(move == 2) {
-			factor.currentNum++;
+			if(factor.currentNum >= factor.LastPageNum()) {
+				System.out.println("마지막 페이지 입니다.");
+			}
+			else {				
+				factor.currentNum++;
+			}
 		}
 		else if(move == 3) {
 			
@@ -154,10 +179,10 @@ public class Board {
 		else if(move == 4) {
 			break;
 		}
+	
 		
 		
-		
-	  }
+		}
 		
 		
 	}
