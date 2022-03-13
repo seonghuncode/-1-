@@ -14,6 +14,7 @@ public class Board {
 	ArrayList<Member> members = new ArrayList<>();
 	ArrayList<ReplyCollect> replies = new ArrayList<>(); 
 	ArrayList<Like> likes = new ArrayList<>();
+	PageFactor factor = new PageFactor();	
 	
 	int boardCollects_num= 4;//게시물 번호
 	int members_num = 4;//멤버 고유의 번호
@@ -105,19 +106,11 @@ public class Board {
 	
 	private void print_page(ArrayList<BoardCollect> boardCollects) {
 		
-		int currentNum = 1;
-		int currentBlockNum = (int)Math.ceil((double)currentNum/5);
-		int startNum = (5 * (currentBlockNum - 1)) + 1;
-		int endNum = startNum + 4;
 		
 		while(true) {
 			
-			
-			//게시물을 보여주는 시작수와 끝수를 정해주는 코드
-			int startCollectNum = 3 * (currentNum - 1);
-			int endCollectNum = startCollectNum + 3;
 		
-		for(int i = startCollectNum; i < endCollectNum; i++) {
+		for(int i = factor.startCollectNum(); i < factor.endCollectNum(); i++) {
 		BoardCollect paging = boardCollects.get(i);
 		paging = (BoardCollect)setNickname(paging); 
 		//paging에 값이 있다면 비교 메서드를 통해 paging에 닉네임을 넣어준다.
@@ -133,10 +126,10 @@ public class Board {
 		
 			
 		//페이지 번호 기능 만들기
-		for(int j = startNum; j <= endNum; j++) {
+		for(int j = factor.startNum(); j <= factor.endNum(); j++) {
 			
-			if(currentNum == j) {
-				System.out.print("[" + j + "}");
+			if(factor.currentNum == j) {
+				System.out.print("[" + j + "]");
 			}
 			else {
 				System.out.print(j + " "); //위가 아닐경우 그냥 숫자만 보여주고 띄우기.
@@ -150,10 +143,10 @@ public class Board {
 		int move = Integer.parseInt(sc.nextLine());
 		
 		if(move == 1) {
-			currentNum--;
+			factor.currentNum--;
 		}
 		else if(move == 2) {
-			currentNum++;
+			factor.currentNum++;
 		}
 		else if(move == 3) {
 			
