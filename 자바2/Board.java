@@ -107,6 +107,24 @@ public class Board {
 	
 	
 	
+	private int wrongCommend(){
+		
+		int cmd = 0;
+		
+		while(true) {
+	
+		try{
+			cmd = Integer.parseInt(sc.nextLine());
+			break;
+		}catch(NumberFormatException e){
+			System.out.println("숫자만 입력 가능합니다. 다시 입력해 주세요.");
+		}
+		
+	   }
+		return cmd;
+	}
+	
+	
 	private void print_page(ArrayList<BoardCollect> boardCollects) {
 		
 		 
@@ -151,7 +169,7 @@ public class Board {
 		
 		
 		System.out.print("원하는 기능을 눌러 주세요(1.뒤로/2.다음/3.선택/4.뒤로가기) :");
-		int move = Integer.parseInt(sc.nextLine());
+		int move = wrongCommend();
 		
 		
 		
@@ -194,10 +212,10 @@ public class Board {
 
 	private void print_sort() {
 		System.out.print("정렬 대상을 선택해 주세요 : 1. 번호, 2. 조회수");
-		int sel1 = Integer.parseInt(sc.nextLine());
+		int sel1 = wrongCommend();
 		
 		System.out.println("정렬 방법을 선택해주세요. (1. 오름차순,  2. 내림차순) :");
-		int sel2 = Integer.parseInt(sc.nextLine());
+		int sel2 = wrongCommend();
 		
 		if(sel1 < 0 || sel1 > 2 && sel2 < 0 || sel2 > 2 ) {
 			System.out.println("sort기능의 선택이 틀렸습니다!!");
@@ -350,7 +368,7 @@ public class Board {
 		
 		int sel = 0;
 		System.out.print("원하는 회원 유형을 선택해 주세요(1. 우수회원 2. 일반회원) :");
-		sel = Integer.parseInt(sc.nextLine());
+		sel = wrongCommend();
 	
 		System.out.print("아이디를 입력해 주세요 :");
 		String my_id = sc.nextLine();
@@ -385,7 +403,7 @@ public class Board {
 			
 			
 			System.out.print("상세보기할 게시물 번호를 입력 주세요(취소 : 0) :");
-			int read = Integer.parseInt(sc.nextLine());
+			int read = wrongCommend();
 			
 			
 			BoardCollect boardCollect = getBoardCollectByNo(read);
@@ -489,7 +507,7 @@ public class Board {
 					+ "4. 삭제, "
 					+ "5. 목록으로) :");
 			
-			int sel = Integer.parseInt(sc.nextLine());
+			int sel = wrongCommend();
 			
 			if(sel == 1) {
 				comment(boardCollect);
@@ -659,7 +677,7 @@ public class Board {
 			
 			list(boardCollects);
 			System.out.print("삭제할 게시물 번호 : ");
-			int target = Integer.parseInt(sc.nextLine());
+			int target = wrongCommend();
 			
 //			int target_real_num = -1;
 //			for(int i = 0; i < numbers.size(); i++) {
@@ -693,7 +711,7 @@ public class Board {
 			list(boardCollects);
 			
 			System.out.print("수정할 게시물 번호 :");
-			int target = Integer.parseInt(sc.nextLine());
+			int target = wrongCommend();
 			
 			BoardCollect BoardCollect = getBoardCollectByNo(target);
 			
