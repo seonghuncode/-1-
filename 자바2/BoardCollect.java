@@ -6,6 +6,9 @@ public class BoardCollect extends BaseCollect{
 	 String title;
 	 int hit;
 	
+	 
+	 public BoardCollect() {}
+	 
 	// -->출력시 회원의 닉네임을 얻어와 저장하기 위한 용도
 	
 	public BoardCollect(int id, String title, String body, int members_id, String regDate, int hit) {  //생성자를 사용하기 위해 만들어 주어야 한다.

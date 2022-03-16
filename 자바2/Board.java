@@ -617,9 +617,10 @@ public class Board {
 		
 		//페이지 기능이 잘 되는 지 확인하기 위해서 여러 test_data를 여러개 만들어 준다.
 		for(int i = 1; i < 25; i++) {
-			boardCollects.add(new BoardCollect(i, "제목"+i, "입니다", i, date, 23));
-			members.add(new GeneralMember(i, "아이디"+i, "비밀번호"+i, "닉네임"+i));
+			BoardCollect collects = new BoardCollect(i, "제목"+i, "입니다", i, date, 23);
+			FileManager.saveCollectToFile(collects);
 		}
+		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
 //		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
 //		members.add(new GeneralMember(2, "아이디2", "비밀번호2", "닉네임2"));
 //		members.add(new SpecialMember(3, "아이디3", "비밀번호3", "닉네임3", 0));
