@@ -3,8 +3,8 @@ package 자바2;
 public class BoardCollect extends BaseCollect{
 	
 	//extends를 해주고 받아오게 될것은 가지고 있을 필요가 없으므로 지워준다.(이때 BaseInfo가 더 상위의 개념이다.)
-	 String title;
-	 int hit;
+	 public String title;
+	 public int hit;
 	
 	 
 	 public BoardCollect() {}

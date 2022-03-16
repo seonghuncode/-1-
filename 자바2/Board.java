@@ -15,6 +15,7 @@ public class Board {
 	ArrayList<ReplyCollect> replies = new ArrayList<>(); 
 	ArrayList<Like> likes = new ArrayList<>();
 	PageFactor factor;
+	FileManager filemanager = new FileManager();
 	
 	int boardCollects_num= 4;//게시물 번호
 	int members_num = 4;//멤버 고유의 번호
@@ -25,6 +26,7 @@ public class Board {
 	
 	public Board() {
 		test_data();
+		boardCollects = filemanager.AllCollectFile();
 		//프로그램 시작전 저장되어 있는 게시물 갯수를 세어 넣어 준다.
 		factor = new PageFactor(boardCollects.size());
 		
@@ -406,7 +408,7 @@ public class Board {
 			int read = wrongCommend();
 			
 			
-			BoardCollect boardCollect = getBoardCollectByNo(read);
+			BoardCollect boardCollect = filemanager.ReadFromFileData(read);
 			
 			if(read == 0) {
 				break;
@@ -615,10 +617,22 @@ public class Board {
 //		boardCollects.add(new BoardCollect(2, "제목2", "입니다", 2, date, 11));
 //		boardCollects.add(new BoardCollect(3, "제목3", "입니다", 3, date, 23));
 		
+	
+		BoardCollect c1 = new BoardCollect(1, "제목1", "입니다", 1, date, 20);
+		BoardCollect c2 = new BoardCollect(2, "제목2", "입니다", 2, date, 20);
+		BoardCollect c3 = new BoardCollect(3, "제목3", "입니다", 3, date, 20);
+		filemanager.saveCollectToFile(c1);
+		filemanager.saveCollectToFile(c2);
+		filemanager.saveCollectToFile(c3);
+		
+		
 		//페이지 기능이 잘 되는 지 확인하기 위해서 여러 test_data를 여러개 만들어 준다.
-		for(int i = 1; i < 25; i++) {
-			BoardCollect collects = new BoardCollect(i, "제목"+i, "입니다", i, date, 23);
-			FileManager.saveCollectToFile(collects);
+		for(int i = 3; i < 25; i++) {
+			BoardCollect testcollects = new BoardCollect(i, "제목"+i, "입니다", i, date, 23);
+			filemanager.saveCollectToFile(testcollects);
+			
+			members.add(new GeneralMember(i, "아이디" + i, "비밀번호" + i, "닉네임" + i));
+			
 		}
 		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
 //		members.add(new GeneralMember(1, "아이디1", "비밀번호1", "닉네임1"));
@@ -689,7 +703,7 @@ public class Board {
 //				}
 //			}
 			
-			BoardCollect boardCollect = getBoardCollectByNo(target);
+			BoardCollect boardCollect = filemanager.ReadFromFileData(target);
 			
 			if(boardCollect == null) {
 				System.out.println("없는 게시물 번호 입니다. 다시 입력해 주세요.");
@@ -714,7 +728,7 @@ public class Board {
 			System.out.print("수정할 게시물 번호 :");
 			int target = wrongCommend();
 			
-			BoardCollect BoardCollect = getBoardCollectByNo(target);
+			BoardCollect BoardCollect = filemanager.ReadFromFileData(target);
 			
 			if(BoardCollect == null) {
 				System.out.println("없는 게시물 입니다. 다시 입력해 주세요.");
